@@ -1,0 +1,11 @@
+support_docs/
+support_scripts/
+
+.DS_Store
+node_modules/
+target/
+dist/
+.svelte-kit/
+
+.env
+.env.*
