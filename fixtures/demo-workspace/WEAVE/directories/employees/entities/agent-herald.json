@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "object_type": "directory_entity",
+  "id": "agent-herald",
+  "slug": "herald",
+  "kind": "employee",
+  "name": "Herald",
+  "title": "Digest Agent",
+  "location": "Local Runtime",
+  "summary": "Assembles weekly digests, promoted summaries, and announcement drafts with clear source links.",
+  "communities": [
+    "home"
+  ],
+  "tags": [
+    "agent",
+    "digest",
+    "communication"
+  ],
+  "featured": false
+}
+

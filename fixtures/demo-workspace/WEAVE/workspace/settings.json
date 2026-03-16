@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "object_type": "workspace_settings",
+  "id": "weave-studio",
+  "name": "WEAVE Studio",
+  "tagline": "A quiet Google-native intranet for studio rhythm, learning, and shared memory.",
+  "storage_mode": "mirrored",
+  "ownership_mode": "my_drive",
+  "default_community_id": "home"
+}
+

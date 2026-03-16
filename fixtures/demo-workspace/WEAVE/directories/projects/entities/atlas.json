@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "object_type": "directory_entity",
+  "id": "project-atlas",
+  "slug": "atlas",
+  "kind": "project",
+  "name": "Project Atlas",
+  "title": "Launch Stream",
+  "location": "Remote",
+  "summary": "Website relaunch with a calmer narrative, stronger quick links, and clearer ownership.",
+  "communities": [
+    "projects"
+  ],
+  "tags": [
+    "launch",
+    "design",
+    "content"
+  ],
+  "featured": true
+}
+

@@ -1,0 +1,10 @@
+[package]
+name = "automations"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow.workspace = true
+gws_adapter = { path = "../gws_adapter" }
+ui_contracts = { path = "../ui_contracts" }
+workspace = { path = "../workspace" }

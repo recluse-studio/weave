@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "object_type": "directory_entity",
+  "id": "person-drew",
+  "slug": "drew-wiberg",
+  "kind": "employee",
+  "name": "Drew Wiberg",
+  "title": "Creative Director",
+  "location": "Chicago",
+  "summary": "Sets editorial direction, shapes launches, and keeps the product grammar coherent.",
+  "communities": [
+    "home",
+    "projects"
+  ],
+  "tags": [
+    "strategy",
+    "launches",
+    "editorial"
+  ],
+  "featured": true
+}
+

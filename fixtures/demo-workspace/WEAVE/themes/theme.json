@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "object_type": "theme",
+  "id": "studio-daybreak",
+  "name": "Studio Daybreak",
+  "accent": "#cb5a2d",
+  "accent_soft": "#f7ddcf",
+  "canvas": "#f4efe7",
+  "surface": "#fffdf8",
+  "heading_font": "Fraunces",
+  "body_font": "IBM Plex Sans"
+}
+

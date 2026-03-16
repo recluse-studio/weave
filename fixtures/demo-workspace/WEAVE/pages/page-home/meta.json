@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "object_type": "page_meta",
+  "id": "page-home",
+  "slug": "home",
+  "title": "Studio Home",
+  "excerpt": "A calm front door for updates, guides, learning, and featured work.",
+  "community_id": "home",
+  "template": "Home",
+  "updated_at": "2026-03-16T10:00:00Z",
+  "featured": true
+}
+

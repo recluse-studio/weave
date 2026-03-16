@@ -1,0 +1,11 @@
+schema_version: 1
+id: weekly-digest
+name: Weekly Digest
+description: Summarize promoted activity and learning reminders into a weekly Gmail digest.
+trigger: schedule.weekly
+steps:
+  - type: gemini.summarize
+  - type: gws.gmail.users.messages.send
+    channel: gmail
+    body_template: weekly-digest
+

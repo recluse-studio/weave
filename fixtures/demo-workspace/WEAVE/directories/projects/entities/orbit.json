@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "object_type": "directory_entity",
+  "id": "project-orbit",
+  "slug": "orbit",
+  "kind": "project",
+  "name": "Project Orbit",
+  "title": "Client Portal",
+  "location": "Austin",
+  "summary": "Operations portal with richer learning, stronger directories, and cleaner search.",
+  "communities": [
+    "projects",
+    "learning"
+  ],
+  "tags": [
+    "portal",
+    "learning",
+    "search"
+  ],
+  "featured": true
+}
+

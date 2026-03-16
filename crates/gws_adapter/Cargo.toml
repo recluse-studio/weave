@@ -1,0 +1,7 @@
+[package]
+name = "gws_adapter"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ui_contracts = { path = "../ui_contracts" }

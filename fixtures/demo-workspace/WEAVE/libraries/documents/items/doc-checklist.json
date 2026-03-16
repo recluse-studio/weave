@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "object_type": "library_item",
+  "id": "doc-checklist",
+  "slug": "launch-checklist",
+  "kind": "document",
+  "title": "Launch Checklist",
+  "description": "A compact sequence of reviews, exports, digests, and go-live checks.",
+  "community_id": "projects",
+  "updated_at": "2026-03-13T16:00:00Z",
+  "tags": [
+    "launch",
+    "checklist",
+    "operations"
+  ],
+  "citation_hint": "Project Atlas > Launch Checklist"
+}
+

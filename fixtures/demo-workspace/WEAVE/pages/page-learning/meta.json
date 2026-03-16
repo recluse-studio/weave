@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "object_type": "page_meta",
+  "id": "page-learning",
+  "slug": "learning-center",
+  "title": "Learning Center",
+  "excerpt": "Courses, office hours, and the current learning path for the quarter.",
+  "community_id": "learning",
+  "template": "Learning Center",
+  "updated_at": "2026-03-15T15:30:00Z",
+  "featured": true
+}
+

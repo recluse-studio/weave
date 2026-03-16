@@ -1,0 +1,27 @@
+{
+  "name": "weave",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n relay,frontend -c blue,green \"npm run dev:relay\" \"npm run dev:frontend\"",
+    "dev:frontend": "npm --prefix frontend run dev -- --host 0.0.0.0",
+    "dev:relay": "bash scripts/dev/relay.sh",
+    "build": "npm run build:relay && npm run build:frontend",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:relay": "bash scripts/ci/cargo-build.sh",
+    "check": "npm run check:relay && npm run check:frontend",
+    "check:frontend": "npm --prefix frontend run check",
+    "check:relay": "bash scripts/ci/cargo-check.sh",
+    "lint": "npm run lint:relay && npm run lint:frontend",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "lint:relay": "bash scripts/ci/cargo-lint.sh",
+    "test": "npm run test:relay && npm run test:frontend",
+    "test:frontend": "npm --prefix frontend run test",
+    "test:relay": "bash scripts/ci/cargo-test.sh"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
+

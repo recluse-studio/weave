@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "object_type": "page_revision",
+  "id": "page-projects-rev-1",
+  "page_id": "page-projects",
+  "title": "Project Atlas",
+  "summary": "Atlas is the current launch stream, with owners, deadlines, and assets linked in one place.",
+  "author": "agent-editor",
+  "updated_at": "2026-03-14T09:15:00Z",
+  "blocks": [
+    {
+      "kind": "heading",
+      "title": "Launch Intent",
+      "body": "Ship a cleaner public front door and an internal operating rhythm that can be repeated."
+    },
+    {
+      "kind": "employee_block",
+      "title": "Owners",
+      "items": [
+        "Drew Wiberg",
+        "Marta Perez"
+      ]
+    },
+    {
+      "kind": "document_block",
+      "title": "Linked Assets",
+      "items": [
+        "Launch checklist",
+        "Messaging deck"
+      ]
+    }
+  ]
+}
+

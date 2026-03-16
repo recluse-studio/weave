@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "object_type": "page_meta",
+  "id": "page-projects",
+  "slug": "project-atlas",
+  "title": "Project Atlas",
+  "excerpt": "A launch project page with scope, owners, links, and the current communication plan.",
+  "community_id": "projects",
+  "template": "Tool Guide",
+  "updated_at": "2026-03-14T09:15:00Z",
+  "featured": false
+}
+

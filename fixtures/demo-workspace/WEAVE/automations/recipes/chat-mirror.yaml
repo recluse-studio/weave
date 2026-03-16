@@ -1,0 +1,12 @@
+schema_version: 1
+id: chat-mirror
+name: Promoted Post Chat Mirror
+description: Mirror promoted launch posts into the studio announcements space.
+trigger: post.promoted
+steps:
+  - type: gws.chat.spaces.messages.create
+    channel: chat
+    parent: spaces/STUDIO_ANNOUNCEMENTS
+  - type: weave.notification.enqueue
+    channel: in_app
+

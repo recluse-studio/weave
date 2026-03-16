@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "object_type": "library_item",
+  "id": "doc-benefits",
+  "slug": "benefits-overview",
+  "kind": "document",
+  "title": "Benefits Overview",
+  "description": "Health, time off, and equipment policies written in plain studio language.",
+  "community_id": "home",
+  "updated_at": "2026-03-12T12:30:00Z",
+  "tags": [
+    "benefits",
+    "policy",
+    "home"
+  ],
+  "citation_hint": "Benefits center > Coverage"
+}
+

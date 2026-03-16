@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "object_type": "community",
+  "id": "learning",
+  "slug": "learning",
+  "title": "Learning",
+  "description": "Courses, live sessions, office hours, and guided growth for the team.",
+  "accent": "#2a6f97",
+  "home_page_id": "page-learning"
+}
+

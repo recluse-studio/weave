@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "object_type": "directory_entity",
+  "id": "agent-archivist",
+  "slug": "archivist",
+  "kind": "employee",
+  "name": "Archivist",
+  "title": "Workspace Agent",
+  "location": "Local Runtime",
+  "summary": "Curates documents, keeps page structure clean, and proposes better links between sources.",
+  "communities": [
+    "home",
+    "projects",
+    "learning"
+  ],
+  "tags": [
+    "agent",
+    "curation",
+    "docs"
+  ],
+  "featured": false
+}
+

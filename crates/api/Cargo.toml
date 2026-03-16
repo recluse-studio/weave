@@ -1,0 +1,23 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow.workspace = true
+automations = { path = "../automations" }
+axum.workspace = true
+drive_sync = { path = "../drive_sync" }
+feed = { path = "../feed" }
+libraries = { path = "../libraries" }
+lms = { path = "../lms" }
+pages = { path = "../pages" }
+profiles = { path = "../profiles" }
+search = { path = "../search" }
+serde.workspace = true
+tokio.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+tracing.workspace = true
+ui_contracts = { path = "../ui_contracts" }
+workspace = { path = "../workspace" }

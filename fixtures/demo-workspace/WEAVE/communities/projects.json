@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "object_type": "community",
+  "id": "projects",
+  "slug": "projects",
+  "title": "Projects",
+  "description": "Project snapshots, launches, retros, and working rituals.",
+  "accent": "#5b8c5a",
+  "home_page_id": "page-projects"
+}
+

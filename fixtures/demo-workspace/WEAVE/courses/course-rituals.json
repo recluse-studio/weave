@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "object_type": "course",
+  "id": "course-rituals",
+  "slug": "working-agreements-for-small-teams",
+  "title": "Working Agreements For Small Teams",
+  "summary": "A practical course on task ownership, office hours, and better team rhythms.",
+  "community_id": "learning",
+  "duration_minutes": 34,
+  "assignment_due": null,
+  "status": "active",
+  "lessons": [
+    {
+      "id": "lesson-rituals-01",
+      "title": "Claim ownership without noise",
+      "minutes": 14
+    },
+    {
+      "id": "lesson-rituals-02",
+      "title": "Make office hours worth attending",
+      "minutes": 20
+    }
+  ],
+  "featured": true
+}
+

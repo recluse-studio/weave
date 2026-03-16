@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "object_type": "library_item",
+  "id": "video-launch-week",
+  "slug": "launch-week-without-noise",
+  "kind": "video",
+  "title": "Launch Week Without Noise",
+  "description": "A 14 minute briefing on calmer launches, tighter comms, and what to automate.",
+  "community_id": "learning",
+  "updated_at": "2026-03-15T08:00:00Z",
+  "tags": [
+    "video",
+    "launches",
+    "learning"
+  ],
+  "citation_hint": "00:04:20 calmer launch sequence"
+}
+

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "object_type": "community",
+  "id": "home",
+  "slug": "home",
+  "title": "Studio Home",
+  "description": "Daily rhythm, featured work, and the live stream for the whole studio.",
+  "accent": "#cb5a2d",
+  "home_page_id": "page-home"
+}
+

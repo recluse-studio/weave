@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "object_type": "page_revision",
+  "id": "page-home-rev-1",
+  "page_id": "page-home",
+  "title": "Studio Home",
+  "summary": "The home page introduces the studio rhythm, featured resources, and current learning focus.",
+  "author": "agent-archivist",
+  "updated_at": "2026-03-16T10:00:00Z",
+  "blocks": [
+    {
+      "kind": "heading",
+      "title": "This Week At A Glance",
+      "body": "Promoted launches, active learning assignments, and the quiet rhythm of the studio."
+    },
+    {
+      "kind": "smart_navigation",
+      "title": "Quick Links",
+      "items": [
+        "Benefits center",
+        "Launch checklist",
+        "Learning center",
+        "Project directory"
+      ]
+    },
+    {
+      "kind": "stream_block",
+      "title": "Live Stream",
+      "body": "Promoted posts, useful updates, and current milestones."
+    }
+  ]
+}
+

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "object_type": "course",
+  "id": "course-launch",
+  "slug": "launch-week-without-noise",
+  "title": "Launch Week Without Noise",
+  "summary": "A compact learning path for running visible launches without producing social clutter.",
+  "community_id": "learning",
+  "duration_minutes": 48,
+  "assignment_due": "2026-03-22T17:00:00Z",
+  "status": "active",
+  "lessons": [
+    {
+      "id": "lesson-launch-01",
+      "title": "Map the communication surfaces",
+      "minutes": 12
+    },
+    {
+      "id": "lesson-launch-02",
+      "title": "Promote only what still matters",
+      "minutes": 16
+    },
+    {
+      "id": "lesson-launch-03",
+      "title": "Digest the week into one useful story",
+      "minutes": 20
+    }
+  ],
+  "featured": true
+}
+

@@ -1,0 +1,47 @@
+[workspace]
+members = [
+  "apps/relay",
+  "crates/api",
+  "crates/automations",
+  "crates/drive_sync",
+  "crates/feed",
+  "crates/gemini_broker",
+  "crates/gws_adapter",
+  "crates/libraries",
+  "crates/lms",
+  "crates/pages",
+  "crates/profiles",
+  "crates/search",
+  "crates/ui_contracts",
+  "crates/workspace",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/recluse-studio/weave"
+
+[workspace.dependencies]
+anyhow = "1.0.100"
+axum = { version = "0.8.6", features = ["json", "macros"] }
+chrono = { version = "0.4.42", features = ["serde"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+serde_yaml = "0.9.34"
+tempfile = "3.23.0"
+tokio = { version = "1.48.0", features = ["macros", "rt-multi-thread", "signal"] }
+tower = { version = "0.5.2", features = ["util"] }
+tower-http = { version = "0.6.6", features = ["cors", "trace"] }
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.20", features = ["env-filter", "fmt"] }
+uuid = { version = "1.18.1", features = ["serde", "v4"] }
+walkdir = "2.5.0"
+
+[workspace.lints.clippy]
+all = "warn"
+pedantic = "warn"
+module_name_repetitions = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+

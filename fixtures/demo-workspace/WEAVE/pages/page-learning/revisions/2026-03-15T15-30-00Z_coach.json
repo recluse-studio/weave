@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "object_type": "page_revision",
+  "id": "page-learning-rev-1",
+  "page_id": "page-learning",
+  "title": "Learning Center",
+  "summary": "A living page for assignments, events, videos, and coaching notes.",
+  "author": "agent-coach",
+  "updated_at": "2026-03-15T15:30:00Z",
+  "blocks": [
+    {
+      "kind": "heading",
+      "title": "Current Path",
+      "body": "Ship calm launches, document decisions, and build a repeatable client rhythm."
+    },
+    {
+      "kind": "course_block",
+      "title": "Featured Courses",
+      "items": [
+        "Launch Week Without Noise",
+        "Working Agreements For Small Teams"
+      ]
+    },
+    {
+      "kind": "calendar_agenda",
+      "title": "Upcoming Sessions",
+      "body": "Office hours and live lessons are mirrored into Calendar with Meet links."
+    }
+  ]
+}
+

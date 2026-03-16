@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "object_type": "directory_entity",
+  "id": "person-marta",
+  "slug": "marta-perez",
+  "kind": "employee",
+  "name": "Marta Perez",
+  "title": "Operations Lead",
+  "location": "San Antonio",
+  "summary": "Turns messy launches into repeatable rituals and keeps the weekly digest useful.",
+  "communities": [
+    "home",
+    "learning"
+  ],
+  "tags": [
+    "operations",
+    "digests",
+    "rituals"
+  ],
+  "featured": true
+}
+
