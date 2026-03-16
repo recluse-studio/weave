@@ -30,7 +30,11 @@ pub fn preview_recipe(recipe: &AutomationRecipe) -> RecipePreview {
         id: recipe.id.clone(),
         name: recipe.name.clone(),
         command_preview: commands.join(" && "),
-        payload_preview: format!("{} step(s) will run against {}", recipe.steps.len(), recipe.trigger),
+        payload_preview: format!(
+            "{} step(s) will run against {}",
+            recipe.steps.len(),
+            recipe.trigger
+        ),
         required_scopes: scopes,
     }
 }

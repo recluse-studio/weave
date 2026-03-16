@@ -28,7 +28,8 @@ pub fn search_workspace(repository: &WorkspaceRepository, query: &str) -> Result
     }
 
     for post in snapshot.feed {
-        let haystack = format!("{} {} {}", post.title, post.body, post.hashtags.join(" ")).to_lowercase();
+        let haystack =
+            format!("{} {} {}", post.title, post.body, post.hashtags.join(" ")).to_lowercase();
         if let Some(score) = score(&needle, &haystack, 90) {
             results.push(SearchResult {
                 id: post.id.clone(),
@@ -43,7 +44,13 @@ pub fn search_workspace(repository: &WorkspaceRepository, query: &str) -> Result
     }
 
     for item in snapshot.documents.into_iter().chain(snapshot.videos) {
-        let haystack = format!("{} {} {}", item.title, item.description, item.tags.join(" ")).to_lowercase();
+        let haystack = format!(
+            "{} {} {}",
+            item.title,
+            item.description,
+            item.tags.join(" ")
+        )
+        .to_lowercase();
         if let Some(score) = score(&needle, &haystack, 80) {
             results.push(SearchResult {
                 id: item.id.clone(),
@@ -58,7 +65,8 @@ pub fn search_workspace(repository: &WorkspaceRepository, query: &str) -> Result
     }
 
     for entity in snapshot.people.into_iter().chain(snapshot.projects) {
-        let haystack = format!("{} {} {}", entity.name, entity.title, entity.summary).to_lowercase();
+        let haystack =
+            format!("{} {} {}", entity.name, entity.title, entity.summary).to_lowercase();
         if let Some(score) = score(&needle, &haystack, 100) {
             results.push(SearchResult {
                 id: entity.id.clone(),
@@ -73,7 +81,8 @@ pub fn search_workspace(repository: &WorkspaceRepository, query: &str) -> Result
     }
 
     for course in snapshot.courses {
-        let haystack = format!("{} {} {}", course.title, course.summary, course.status).to_lowercase();
+        let haystack =
+            format!("{} {} {}", course.title, course.summary, course.status).to_lowercase();
         if let Some(score) = score(&needle, &haystack, 110) {
             results.push(SearchResult {
                 id: course.id.clone(),

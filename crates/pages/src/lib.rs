@@ -35,7 +35,11 @@ pub fn publish_page(
 
     let mut record = get_page(repository, page_id)?;
     let now = Utc::now();
-    let revision_file = format!("{}_{}.json", now.format("%Y-%m-%dT%H-%M-%SZ"), request.author);
+    let revision_file = format!(
+        "{}_{}.json",
+        now.format("%Y-%m-%dT%H-%M-%SZ"),
+        request.author
+    );
 
     record.meta.title = request.title.clone();
     record.meta.excerpt = request.summary.clone();
@@ -53,9 +57,15 @@ pub fn publish_page(
     };
 
     write_pretty_json(&meta_path, &record.meta)?;
-    write_pretty_json(&revision_dir.join(&revision_file), &record.published_revision)?;
-    fs::write(page_root.join("published.ref"), format!("{revision_file}\n"))
-        .with_context(|| format!("failed updating published ref for {page_id}"))?;
+    write_pretty_json(
+        &revision_dir.join(&revision_file),
+        &record.published_revision,
+    )?;
+    fs::write(
+        page_root.join("published.ref"),
+        format!("{revision_file}\n"),
+    )
+    .with_context(|| format!("failed updating published ref for {page_id}"))?;
 
     get_page(repository, page_id)
 }

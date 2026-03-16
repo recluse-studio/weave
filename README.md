@@ -46,4 +46,31 @@ WEAVE is intended to support:
 
 ## Current Status
 
-This repository is being set up as a specification-first project. The immediate goal is to define the product, the architecture, the implementation order, and the operating rules clearly enough that a long-running coding agent can build the system end to end without reinterpreting the fundamentals midstream.
+The repository now includes:
+
+- a Rust workspace with file-backed feature crates
+- an Axum relay that reads canonical fixture content from a Drive-shaped workspace
+- a Svelte frontend for dashboard, search, feed, editorial publishing, directories, libraries, learning, and automation previews
+- a demo workspace fixture under `fixtures/demo-workspace/WEAVE`
+
+The current implementation is a strong local-first baseline rather than a fully finished product. It is already useful as a working demo and development harness for the broader build.
+
+## Quick Start
+
+1. Install Rust with `rustup` if `cargo` is not already available.
+2. Run `npm install` in the repo root.
+3. Run `npm --prefix frontend install`.
+4. Run `bash scripts/dev/doctor.sh` to verify the local toolchain.
+5. Run `npm run dev`.
+6. Open the Vite URL shown in the terminal, usually [http://127.0.0.1:5173](http://127.0.0.1:5173).
+
+The relay serves the local API on [http://127.0.0.1:8787](http://127.0.0.1:8787).
+
+## Useful Commands
+
+- `npm run dev`: run the relay and frontend together
+- `npm run build`: build the relay and frontend
+- `npm run check`: run Rust and frontend typechecks
+- `npm run test`: run Rust and frontend tests
+- `npm run lint`: run formatting and lint checks where configured
+- `bash scripts/ci/security-audit.sh`: run local security-oriented checks

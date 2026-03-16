@@ -34,7 +34,6 @@ impl AppState {
     }
 }
 
-#[must_use]
 pub fn app(repository: WorkspaceRepository) -> Router {
     let state = AppState::new(repository);
 
@@ -50,7 +49,10 @@ pub fn app(repository: WorkspaceRepository) -> Router {
         .route("/api/courses", get(courses))
         .route("/api/search", get(search))
         .route("/api/automations", get(automation_index))
-        .route("/api/automations/{recipe_id}/preview", get(automation_preview))
+        .route(
+            "/api/automations/{recipe_id}/preview",
+            get(automation_preview),
+        )
         .route("/api/health", get(health))
         .with_state(state)
         .layer(CorsLayer::permissive())
@@ -92,7 +94,10 @@ async fn feed_create(
     State(state): State<AppState>,
     Json(request): Json<CreateFeedPostRequest>,
 ) -> ApiResult<impl IntoResponse> {
-    Ok((StatusCode::CREATED, Json(append_post(&state.repository, request)?)))
+    Ok((
+        StatusCode::CREATED,
+        Json(append_post(&state.repository, request)?),
+    ))
 }
 
 async fn directory_index(
@@ -169,9 +174,16 @@ mod tests {
 
     #[tokio::test]
     async fn dashboard_endpoint_responds() {
-        let app = app(WorkspaceRepository::new(find_fixture_root().expect("fixture root")));
+        let app = app(WorkspaceRepository::new(
+            find_fixture_root().expect("fixture root"),
+        ));
         let response = app
-            .oneshot(Request::builder().uri("/api/dashboard").body(Body::empty()).expect("request"))
+            .oneshot(
+                Request::builder()
+                    .uri("/api/dashboard")
+                    .body(Body::empty())
+                    .expect("request"),
+            )
             .await
             .expect("response");
 

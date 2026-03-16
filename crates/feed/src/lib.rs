@@ -19,7 +19,9 @@ pub fn append_post(
     let year = now.year();
     let month = now.month();
     let day = now.day();
-    let segment_dir = repository.root().join(format!("feed/segments/{year:04}/{month:02}/{day:02}"));
+    let segment_dir = repository
+        .root()
+        .join(format!("feed/segments/{year:04}/{month:02}/{day:02}"));
     fs::create_dir_all(&segment_dir)?;
     let segment_path = segment_dir.join("feed-0001.jsonl");
 

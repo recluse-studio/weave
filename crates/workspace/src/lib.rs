@@ -273,7 +273,12 @@ mod tests {
         assert_eq!(snapshot.settings.name, "WEAVE Studio");
         assert!(snapshot.pages.len() >= 3);
         assert!(snapshot.feed.len() >= 3);
-        assert!(snapshot.documents.iter().any(|item| item.kind == "document"));
+        assert!(
+            snapshot
+                .documents
+                .iter()
+                .any(|item| item.kind == "document")
+        );
         assert!(snapshot.videos.iter().any(|item| item.kind == "video"));
     }
 }
