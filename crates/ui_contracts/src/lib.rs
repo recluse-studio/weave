@@ -311,12 +311,19 @@ pub struct CacheRebuildReport {
 pub struct BootstrapStatus {
     pub workspace_root: String,
     pub demo_workspace_root: String,
+    pub config_path: String,
+    pub workspace_root_persisted: bool,
     pub gws_installed: bool,
     #[serde(default)]
     pub gws_version: Option<String>,
     pub gemini_configured: bool,
     pub gemini_source: String,
     pub desktop_shell_ready: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct SelectWorkspaceRootRequest {
+    pub path: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]

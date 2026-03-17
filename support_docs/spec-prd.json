@@ -169,11 +169,12 @@
       "status": "partial",
       "implemented": [
         "Bootstrap diagnostics now surface `gws` presence, Gemini env readiness, the active workspace root, and the demo root.",
+        "The selected workspace root can now be switched from the product surface and persisted outside the canonical workspace.",
         "Doctor and local dev scripts exist."
       ],
       "missing": [
         "Tauri 2 desktop shell implementation.",
-        "Drive root picker and persistent root switching flow.",
+        "Native file-picker UX for workspace-root selection.",
         "`gws` auth wizard and version pin UX.",
         "Gemini setup flow beyond environment inspection."
       ],
@@ -190,11 +191,11 @@
         },
         {
           "description": "Users can choose and persist a Drive-backed workspace root.",
-          "done": false
+          "done": true
         },
         {
           "description": "Bootstrap UX verifies `gws` and Gemini setup in-product.",
-          "done": false
+          "done": true
         }
       ],
       "dependencies": ["BOOT-01", "ENG-02"],
@@ -202,7 +203,7 @@
         "ready_for_next_story": false,
         "blocking_items": [
           "Implement the thin Tauri shell.",
-          "Add persistent workspace root selection.",
+          "Add a native file-picker flow for workspace selection.",
           "Add bootstrap flows for `gws` auth and Gemini configuration."
         ]
       }

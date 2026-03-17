@@ -49,6 +49,7 @@
   let loading = true
   let working = false
   let error = ''
+  let workspaceRootInput = ''
 
   let composer = {
     author_id: 'agent-herald',
@@ -164,6 +165,7 @@
 
       dashboard = dashboardResponse
       bootstrapStatus = bootstrapResponse
+      workspaceRootInput = bootstrapResponse.workspace_root
       pages = pageResponse
       feedPosts = feedResponse
       employees = employeeResponse
@@ -206,6 +208,30 @@
       await loadWorkspace()
     } catch (rebuildError) {
       error = rebuildError instanceof Error ? rebuildError.message : 'Failed to rebuild cache.'
+    } finally {
+      working = false
+    }
+  }
+
+  const selectWorkspaceRoot = async (path: string) => {
+    if (!path.trim()) {
+      return
+    }
+
+    working = true
+    error = ''
+
+    try {
+      bootstrapStatus = await postJson<BootstrapStatus, { path: string }>(
+        '/api/bootstrap/workspace-root',
+        {
+          path: path.trim(),
+        },
+      )
+      workspaceRootInput = bootstrapStatus.workspace_root
+      await loadWorkspace()
+    } catch (rootError) {
+      error = rootError instanceof Error ? rootError.message : 'Failed to switch workspace root.'
     } finally {
       working = false
     }
@@ -381,6 +407,36 @@
               <p>Demo root: {bootstrapStatus.demo_workspace_root}</p>
             </li>
           </ul>
+
+          <div class="editor-grid">
+            <label class="field compact">
+              <span>Selected workspace root</span>
+              <input bind:value={workspaceRootInput} placeholder="/path/to/WEAVE" />
+            </label>
+            <div class="button-row">
+              <button
+                class="ghost"
+                type="button"
+                disabled={working}
+                on:click={() => selectWorkspaceRoot(bootstrapStatus?.demo_workspace_root ?? '')}
+              >
+                Use demo root
+              </button>
+              <button
+                class="accent"
+                type="button"
+                disabled={working}
+                on:click={() => selectWorkspaceRoot(workspaceRootInput)}
+              >
+                Persist root
+              </button>
+            </div>
+            <div class="preview-box">
+              <strong>Bootstrap config</strong>
+              <p>{bootstrapStatus.config_path}</p>
+              <p>{bootstrapStatus.workspace_root_persisted ? 'Persisted across restarts' : 'Using in-memory default only'}</p>
+            </div>
+          </div>
         </article>
       {/if}
     </section>

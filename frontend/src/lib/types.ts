@@ -226,6 +226,8 @@ export type CacheRebuildReport = {
 export type BootstrapStatus = {
   workspace_root: string
   demo_workspace_root: string
+  config_path: string
+  workspace_root_persisted: boolean
   gws_installed: boolean
   gws_version?: string | null
   gemini_configured: boolean
