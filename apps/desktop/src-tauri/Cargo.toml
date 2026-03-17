@@ -1,0 +1,15 @@
+[package]
+name = "weave_desktop"
+version = "0.1.0"
+edition = "2024"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+anyhow = "1.0.100"
+api = { path = "../../../crates/api" }
+axum = { version = "0.8.6", features = ["json", "macros"] }
+tauri = { version = "2", features = [] }
+tokio = { version = "1.48.0", features = ["rt-multi-thread"] }
+workspace = { path = "../../../crates/workspace" }

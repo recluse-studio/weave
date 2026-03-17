@@ -15,6 +15,7 @@ members = [
   "crates/ui_contracts",
   "crates/workspace",
 ]
+exclude = ["apps/desktop/src-tauri"]
 resolver = "2"
 
 [workspace.package]

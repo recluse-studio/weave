@@ -170,10 +170,10 @@
       "implemented": [
         "Bootstrap diagnostics now surface `gws` presence, Gemini env readiness, the active workspace root, and the demo root.",
         "The selected workspace root can now be switched from the product surface and persisted outside the canonical workspace.",
+        "A thin Tauri desktop shell scaffold now exists and compiles against the shared Rust runtime.",
         "Doctor and local dev scripts exist."
       ],
       "missing": [
-        "Tauri 2 desktop shell implementation.",
         "Native file-picker UX for workspace-root selection.",
         "`gws` auth wizard and version pin UX.",
         "Gemini setup flow beyond environment inspection."
@@ -182,12 +182,14 @@
         "frontend/src/App.svelte",
         "crates/api/src/lib.rs",
         "scripts/dev/doctor.sh",
-        "apps/desktop/README.md"
+        "apps/desktop/README.md",
+        "apps/desktop/src-tauri/src/main.rs",
+        "apps/desktop/src-tauri/tauri.conf.json"
       ],
       "acceptance_criteria": [
         {
           "description": "The product ships a runnable Tauri desktop shell.",
-          "done": false
+          "done": true
         },
         {
           "description": "Users can choose and persist a Drive-backed workspace root.",

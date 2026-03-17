@@ -71,7 +71,9 @@ The relay serves the local API on [http://127.0.0.1:8787](http://127.0.0.1:8787)
 ## Useful Commands
 
 - `npm run dev`: run the relay and frontend together
+- `npm run dev:desktop`: run the Tauri desktop shell against the shared local API
 - `npm run build`: build the relay and frontend
+- `npm run build:desktop`: build the Tauri desktop shell bundle
 - `npm run check`: run Rust and frontend typechecks
 - `npm run test`: run Rust and frontend tests
 - `npm run lint`: run formatting and lint checks where configured
