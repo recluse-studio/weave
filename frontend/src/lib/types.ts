@@ -34,6 +34,24 @@ export type PageRecord = {
     updated_at: string
     blocks: PageBlock[]
   }
+  revisions: Array<{
+    id: string
+    title: string
+    summary: string
+    author: string
+    updated_at: string
+    blocks: PageBlock[]
+  }>
+  drafts: PageDraft[]
+}
+
+export type PageDraft = {
+  page_id: string
+  author: string
+  title: string
+  summary: string
+  updated_at: string
+  blocks: PageBlock[]
 }
 
 export type FeedPost = {
@@ -90,11 +108,32 @@ export type AutomationRecipe = {
   trigger: string
 }
 
+export type AgentRecord = {
+  id: string
+  name: string
+  bio: string
+  communities: string[]
+  schedule: string
+  preferred_model: string
+  allowed_tools: string[]
+  posting_rules: string[]
+}
+
 export type RecipePreview = {
   id: string
   name: string
   command_preview: string
   payload_preview: string
+  required_scopes: string[]
+}
+
+export type GoogleActionPreview = {
+  id: string
+  title: string
+  surface: string
+  summary: string
+  object_id: string
+  command_preview: string
   required_scopes: string[]
 }
 
@@ -125,7 +164,9 @@ export type DashboardSnapshot = {
   featured_documents: LibraryItem[]
   featured_videos: LibraryItem[]
   featured_courses: Course[]
+  agents: AgentRecord[]
   automations: AutomationRecipe[]
+  google_previews: GoogleActionPreview[]
   sync_health: SyncHealth
 }
 

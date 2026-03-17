@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 anyhow.workspace = true
 chrono.workspace = true
+gws_adapter = { path = "../gws_adapter" }
 serde.workspace = true
 serde_json.workspace = true
 serde_yaml.workspace = true

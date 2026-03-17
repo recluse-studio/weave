@@ -304,6 +304,7 @@ dependencies = [
 name = "gws_adapter"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "ui_contracts",
 ]
 
@@ -1324,6 +1325,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "chrono",
+ "gws_adapter",
  "serde",
  "serde_json",
  "serde_yaml",

@@ -2,7 +2,9 @@ use std::{fs, path::Path};
 
 use anyhow::{Context, Result, anyhow};
 use chrono::Utc;
-use ui_contracts::{PageMeta, PageRecord, PageRevision, PublishPageRequest};
+use ui_contracts::{
+    PageDraft, PageMeta, PageRecord, PageRevision, PublishPageRequest, SaveDraftRequest,
+};
 use workspace::WorkspaceRepository;
 
 pub fn list_pages(repository: &WorkspaceRepository) -> Result<Vec<PageMeta>> {
@@ -68,6 +70,35 @@ pub fn publish_page(
     .with_context(|| format!("failed updating published ref for {page_id}"))?;
 
     get_page(repository, page_id)
+}
+
+pub fn list_drafts(repository: &WorkspaceRepository, page_id: &str) -> Result<Vec<PageDraft>> {
+    Ok(get_page(repository, page_id)?.drafts)
+}
+
+pub fn save_draft(
+    repository: &WorkspaceRepository,
+    page_id: &str,
+    request: SaveDraftRequest,
+) -> Result<PageDraft> {
+    let page_root = repository.root().join("pages").join(page_id);
+    let draft_dir = page_root.join("drafts");
+    fs::create_dir_all(&draft_dir)?;
+
+    let draft = PageDraft {
+        schema_version: 1,
+        object_type: "page_draft".to_string(),
+        page_id: page_id.to_string(),
+        author: request.author.clone(),
+        title: request.title,
+        summary: request.summary,
+        updated_at: Utc::now(),
+        blocks: request.blocks,
+    };
+
+    write_pretty_json(&draft_dir.join(format!("{}.json", request.author)), &draft)?;
+
+    Ok(draft)
 }
 
 fn write_pretty_json<T: serde::Serialize>(path: &Path, value: &T) -> Result<()> {

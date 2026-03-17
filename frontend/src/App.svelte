@@ -4,11 +4,13 @@
   import { fetchJson, postJson } from './lib/api'
   import { deriveWorkspaceStats, formatDate, hashtags } from './lib/format'
   import type {
+    AgentRecord,
     AutomationRecipe,
     Course,
     DashboardSnapshot,
     DirectoryEntity,
     FeedPost,
+    GoogleActionPreview,
     LibraryItem,
     PageMeta,
     PageRecord,
@@ -25,6 +27,8 @@
   let videos: LibraryItem[] = []
   let courses: Course[] = []
   let automations: AutomationRecipe[] = []
+  let agents: AgentRecord[] = []
+  let googlePreviews: GoogleActionPreview[] = []
   let automationPreview: RecipePreview | null = null
   let selectedPageId = ''
   let selectedPage: PageRecord | null = null
@@ -61,6 +65,46 @@
       summary: selectedPage.published_revision.summary,
       body: selectedPage.published_revision.blocks[0]?.body ?? '',
       bullets: (selectedPage.published_revision.blocks[1]?.items ?? []).join('\n'),
+    }
+  }
+
+  const saveDraft = async () => {
+    if (!selectedPageId) {
+      return
+    }
+
+    working = true
+    error = ''
+
+    try {
+      await postJson(`/api/pages/${selectedPageId}/drafts`, {
+        author: editor.author,
+        title: editor.title,
+        summary: editor.summary,
+        blocks: [
+          {
+            kind: 'heading',
+            title: editor.title,
+            body: editor.body,
+            items: [],
+          },
+          {
+            kind: 'callout',
+            title: 'Draft focus',
+            body: editor.summary,
+            items: editor.bullets
+              .split('\n')
+              .map((entry) => entry.trim())
+              .filter(Boolean),
+          },
+        ],
+      })
+
+      await loadWorkspace()
+    } catch (draftError) {
+      error = draftError instanceof Error ? draftError.message : 'Failed to save draft.'
+    } finally {
+      working = false
     }
   }
 
@@ -111,6 +155,8 @@
       videos = videoResponse
       courses = courseResponse
       automations = automationResponse
+      agents = dashboardResponse.agents
+      googlePreviews = dashboardResponse.google_previews
 
       if (pages[0]) {
         await loadPage(selectedPageId || pages[0].id)
@@ -376,10 +422,30 @@
               <span>Callout bullets</span>
               <textarea bind:value={editor.bullets} rows="4"></textarea>
             </label>
-            <button class="accent" type="button" disabled={working} on:click={publishPage}>
-              Publish revision
-            </button>
+            <div class="button-row">
+              <button class="ghost" type="button" disabled={working} on:click={saveDraft}>
+                Save draft
+              </button>
+              <button class="accent" type="button" disabled={working} on:click={publishPage}>
+                Publish revision
+              </button>
+            </div>
           </div>
+
+          {#if selectedPage.drafts.length}
+            <div class="draft-panel">
+              <p class="eyebrow">Drafts</p>
+              <ul class="stack compact-stack">
+                {#each selectedPage.drafts as draft}
+                  <li class="mini-card">
+                    <strong>{draft.title}</strong>
+                    <span>{draft.author} · {formatDate(draft.updated_at)}</span>
+                    <p>{draft.summary}</p>
+                  </li>
+                {/each}
+              </ul>
+            </div>
+          {/if}
         {/if}
       </article>
 
@@ -475,6 +541,43 @@
             <p>{automationPreview.payload_preview}</p>
           </div>
         {/if}
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Agents</p>
+            <h3>First-class workspace members</h3>
+          </div>
+        </div>
+        <ul class="stack compact-stack">
+          {#each agents as agent}
+            <li class="mini-card">
+              <strong>{agent.name}</strong>
+              <span>{agent.preferred_model}</span>
+              <p>{agent.bio}</p>
+            </li>
+          {/each}
+        </ul>
+      </article>
+
+      <article class="panel automation-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Google Coordination</p>
+            <h3>Operator-visible secondary surfaces</h3>
+          </div>
+        </div>
+        <ul class="stack compact-stack">
+          {#each googlePreviews as preview}
+            <li class="mini-card">
+              <strong>{preview.title}</strong>
+              <span>{preview.surface}</span>
+              <p>{preview.summary}</p>
+              <code>{preview.command_preview}</code>
+            </li>
+          {/each}
+        </ul>
       </article>
     </section>
   </main>

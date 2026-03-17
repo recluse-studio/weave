@@ -69,6 +69,18 @@ pub struct PageRevision {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct PageDraft {
+    pub schema_version: u16,
+    pub object_type: String,
+    pub page_id: String,
+    pub author: String,
+    pub title: String,
+    pub summary: String,
+    pub updated_at: Timestamp,
+    pub blocks: Vec<PageBlock>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct PageBlock {
     pub kind: String,
     #[serde(default)]
@@ -163,6 +175,20 @@ pub struct AutomationRecipe {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct AgentRecord {
+    pub schema_version: u16,
+    pub object_type: String,
+    pub id: String,
+    pub name: String,
+    pub bio: String,
+    pub communities: Vec<String>,
+    pub schedule: String,
+    pub preferred_model: String,
+    pub allowed_tools: Vec<String>,
+    pub posting_rules: Vec<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct AutomationStep {
     #[serde(rename = "type")]
     pub step_type: String,
@@ -226,6 +252,17 @@ pub struct RecipePreview {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct GoogleActionPreview {
+    pub id: String,
+    pub title: String,
+    pub surface: String,
+    pub summary: String,
+    pub object_id: String,
+    pub command_preview: String,
+    pub required_scopes: Vec<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct WorkspaceSnapshot {
     pub settings: WorkspaceSettings,
     pub theme: ThemeDefinition,
@@ -237,7 +274,9 @@ pub struct WorkspaceSnapshot {
     pub videos: Vec<LibraryItem>,
     pub courses: Vec<CourseRecord>,
     pub feed: Vec<FeedPost>,
+    pub agents: Vec<AgentRecord>,
     pub automations: Vec<AutomationRecipe>,
+    pub google_previews: Vec<GoogleActionPreview>,
     pub sync_health: SyncHealth,
 }
 
@@ -245,6 +284,8 @@ pub struct WorkspaceSnapshot {
 pub struct PageRecord {
     pub meta: PageMeta,
     pub published_revision: PageRevision,
+    pub revisions: Vec<PageRevision>,
+    pub drafts: Vec<PageDraft>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -258,7 +299,9 @@ pub struct DashboardSnapshot {
     pub featured_documents: Vec<LibraryItem>,
     pub featured_videos: Vec<LibraryItem>,
     pub featured_courses: Vec<CourseRecord>,
+    pub agents: Vec<AgentRecord>,
     pub automations: Vec<AutomationRecipe>,
+    pub google_previews: Vec<GoogleActionPreview>,
     pub sync_health: SyncHealth,
 }
 
@@ -276,6 +319,14 @@ pub struct WorkspaceSummary {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct PublishPageRequest {
+    pub author: String,
+    pub title: String,
+    pub summary: String,
+    pub blocks: Vec<PageBlock>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct SaveDraftRequest {
     pub author: String,
     pub title: String,
     pub summary: String,

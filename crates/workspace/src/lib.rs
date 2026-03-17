@@ -5,11 +5,12 @@ use std::{
 
 use anyhow::{Context, Result, anyhow};
 use chrono::Utc;
+use gws_adapter::preview_workspace_actions;
 use serde::de::DeserializeOwned;
 use ui_contracts::{
-    AutomationRecipe, CommunityRecord, CourseRecord, DashboardSnapshot, DirectoryEntity, FeedPost,
-    LibraryItem, PageMeta, PageRecord, PageRevision, SyncHealth, ThemeDefinition,
-    WorkspaceSettings, WorkspaceSnapshot, WorkspaceSummary,
+    AgentRecord, AutomationRecipe, CommunityRecord, CourseRecord, DashboardSnapshot,
+    DirectoryEntity, FeedPost, LibraryItem, PageDraft, PageMeta, PageRecord, PageRevision,
+    SyncHealth, ThemeDefinition, WorkspaceSettings, WorkspaceSnapshot, WorkspaceSummary,
 };
 use walkdir::WalkDir;
 
@@ -40,6 +41,7 @@ impl WorkspaceRepository {
         let videos = self.read_json_dir::<LibraryItem>("libraries/videos/items")?;
         let courses = self.load_courses()?;
         let feed = self.load_feed()?;
+        let agents = self.load_agents()?;
         let automations = self.load_automations()?;
         let sync_health = SyncHealth {
             workspace_root: self.root.display().to_string(),
@@ -51,7 +53,7 @@ impl WorkspaceRepository {
             stale_cache_count: 0,
         };
 
-        Ok(WorkspaceSnapshot {
+        let mut snapshot = WorkspaceSnapshot {
             settings,
             theme,
             communities,
@@ -62,9 +64,14 @@ impl WorkspaceRepository {
             videos,
             courses,
             feed,
+            agents,
             automations,
+            google_previews: Vec::new(),
             sync_health,
-        })
+        };
+        snapshot.google_previews = preview_workspace_actions(&snapshot);
+
+        Ok(snapshot)
     }
 
     pub fn dashboard(&self) -> Result<DashboardSnapshot> {
@@ -114,7 +121,9 @@ impl WorkspaceRepository {
                 .filter(|course| course.featured)
                 .cloned()
                 .collect(),
+            agents: snapshot.agents.clone(),
             automations: snapshot.automations.clone(),
+            google_previews: snapshot.google_previews.clone(),
             sync_health: snapshot.sync_health,
         })
     }
@@ -141,10 +150,16 @@ impl WorkspaceRepository {
             .with_context(|| format!("missing published ref for {}", meta.id))?;
         let revision_path = page_dir.join("revisions").join(published_ref.trim());
         let published_revision: PageRevision = read_json_file(&revision_path)?;
+        let revisions =
+            self.read_json_dir_from_path::<PageRevision>(&page_dir.join("revisions"))?;
+        let mut drafts = self.read_json_dir_from_path::<PageDraft>(&page_dir.join("drafts"))?;
+        drafts.sort_by(|left, right| right.updated_at.cmp(&left.updated_at));
 
         Ok(PageRecord {
             meta,
             published_revision,
+            revisions,
+            drafts,
         })
     }
 
@@ -216,6 +231,23 @@ impl WorkspaceRepository {
         Ok(recipes)
     }
 
+    fn load_agents(&self) -> Result<Vec<AgentRecord>> {
+        let agent_root = self.root.join("agents");
+        if !agent_root.exists() {
+            return Ok(Vec::new());
+        }
+
+        let mut agents = fs::read_dir(agent_root)?
+            .filter_map(std::result::Result::ok)
+            .map(|entry| entry.path())
+            .filter(|path| path.is_dir())
+            .map(|path| read_json_file::<AgentRecord>(&path.join("agent.json")))
+            .collect::<Result<Vec<_>>>()?;
+
+        agents.sort_by(|left, right| left.name.cmp(&right.name));
+        Ok(agents)
+    }
+
     fn read_json<T>(&self, relative_path: &str) -> Result<T>
     where
         T: DeserializeOwned,
@@ -227,7 +259,13 @@ impl WorkspaceRepository {
     where
         T: DeserializeOwned,
     {
-        let dir = self.root.join(relative_dir);
+        self.read_json_dir_from_path(&self.root.join(relative_dir))
+    }
+
+    fn read_json_dir_from_path<T>(&self, dir: &Path) -> Result<Vec<T>>
+    where
+        T: DeserializeOwned,
+    {
         if !dir.exists() {
             return Ok(Vec::new());
         }
@@ -273,6 +311,9 @@ mod tests {
         assert_eq!(snapshot.settings.name, "WEAVE Studio");
         assert!(snapshot.pages.len() >= 3);
         assert!(snapshot.feed.len() >= 3);
+        assert!(snapshot.pages.iter().any(|page| !page.drafts.is_empty()));
+        assert!(!snapshot.agents.is_empty());
+        assert!(!snapshot.google_previews.is_empty());
         assert!(
             snapshot
                 .documents

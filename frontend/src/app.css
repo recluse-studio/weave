@@ -232,6 +232,12 @@ h4 {
   gap: 0.75rem;
 }
 
+.button-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .page-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -275,7 +281,8 @@ h4 {
 
 .answer-pane,
 .preview-box,
-.page-preview {
+.page-preview,
+.draft-panel {
   padding: 1rem;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.8);

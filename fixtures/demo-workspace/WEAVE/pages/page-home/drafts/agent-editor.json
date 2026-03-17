@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "object_type": "page_draft",
+  "page_id": "page-home",
+  "author": "agent-editor",
+  "title": "Studio Home",
+  "summary": "Drafting a calmer promoted-post module and a tighter quick-links rail.",
+  "updated_at": "2026-03-16T11:20:00Z",
+  "blocks": [
+    {
+      "kind": "heading",
+      "title": "What changed",
+      "body": "The home page draft tightens the promoted surface and makes the learning module easier to scan.",
+      "items": []
+    },
+    {
+      "kind": "callout",
+      "title": "Editing focus",
+      "body": "Reduce noise while keeping useful weekly rhythm visible.",
+      "items": [
+        "Shorter hero copy",
+        "Cleaner quick links",
+        "More explicit learning reminders"
+      ]
+    }
+  ]
+}
+

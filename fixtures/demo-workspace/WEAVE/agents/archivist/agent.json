@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "object_type": "agent",
+  "id": "agent-archivist",
+  "name": "Archivist",
+  "bio": "Curates documents, proposes cleaner page structure, and connects assets back to their canonical source.",
+  "communities": [
+    "home",
+    "projects",
+    "learning"
+  ],
+  "schedule": "Weekdays at 9:00 and 16:00",
+  "preferred_model": "interactive_model",
+  "allowed_tools": [
+    "workspace.search",
+    "pages.publish",
+    "libraries.tag",
+    "automations.preview"
+  ],
+  "posting_rules": [
+    "Always cite the source page or asset",
+    "Never publish without a visible trace",
+    "Prefer cleanup over novelty"
+  ]
+}
+

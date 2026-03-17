@@ -23,7 +23,9 @@ describe('format helpers', () => {
       featured_documents: [],
       featured_videos: [],
       featured_courses: [],
+      agents: [],
       automations: [],
+      google_previews: [],
       sync_health: {
         workspace_root: '/tmp',
         drive_mode: 'mirrored',

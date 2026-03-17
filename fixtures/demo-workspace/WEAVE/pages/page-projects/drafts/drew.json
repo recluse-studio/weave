@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "object_type": "page_draft",
+  "page_id": "page-projects",
+  "author": "drew",
+  "title": "Project Atlas",
+  "summary": "Drafting a launch checklist block and a cleaner owner handoff section.",
+  "updated_at": "2026-03-16T10:45:00Z",
+  "blocks": [
+    {
+      "kind": "heading",
+      "title": "Current draft",
+      "body": "The page draft adds launch sequencing and more explicit downstream export steps.",
+      "items": []
+    },
+    {
+      "kind": "callout",
+      "title": "Need before publish",
+      "body": "Confirm the deck export and digest copy.",
+      "items": [
+        "Slide outline",
+        "Digest snippet",
+        "Calendar review time"
+      ]
+    }
+  ]
+}
+
