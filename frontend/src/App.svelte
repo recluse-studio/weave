@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
-  import { fetchJson, postJson } from './lib/api'
+  import { fetchJson, pickWorkspaceRoot, postJson } from './lib/api'
   import { deriveWorkspaceStats, formatDate, hashtags } from './lib/format'
   import type {
     AgentRecord,
@@ -237,6 +237,15 @@
     }
   }
 
+  const pickAndSelectWorkspaceRoot = async () => {
+    const pickedRoot = await pickWorkspaceRoot()
+    if (!pickedRoot) {
+      return
+    }
+
+    await selectWorkspaceRoot(pickedRoot)
+  }
+
   const createPost = async () => {
     working = true
     error = ''
@@ -421,6 +430,9 @@
                 on:click={() => selectWorkspaceRoot(bootstrapStatus?.demo_workspace_root ?? '')}
               >
                 Use demo root
+              </button>
+              <button class="ghost" type="button" disabled={working} on:click={pickAndSelectWorkspaceRoot}>
+                Choose folder
               </button>
               <button
                 class="accent"

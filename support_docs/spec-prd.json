@@ -171,10 +171,10 @@
         "Bootstrap diagnostics now surface `gws` presence, Gemini env readiness, the active workspace root, and the demo root.",
         "The selected workspace root can now be switched from the product surface and persisted outside the canonical workspace.",
         "A thin Tauri desktop shell scaffold now exists and compiles against the shared Rust runtime.",
+        "The desktop shell now exposes a native folder picker for workspace-root selection.",
         "Doctor and local dev scripts exist."
       ],
       "missing": [
-        "Native file-picker UX for workspace-root selection.",
         "`gws` auth wizard and version pin UX.",
         "Gemini setup flow beyond environment inspection."
       ],

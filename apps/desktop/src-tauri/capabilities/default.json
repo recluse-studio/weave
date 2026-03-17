@@ -3,5 +3,5 @@
   "identifier": "main-capability",
   "description": "Capability for the WEAVE desktop shell",
   "windows": ["main"],
-  "permissions": ["core:default"]
+  "permissions": ["core:default", "dialog:default"]
 }

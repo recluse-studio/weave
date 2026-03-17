@@ -1,1 +1,1 @@
-{"main-capability":{"identifier":"main-capability","description":"Capability for the WEAVE desktop shell","local":true,"windows":["main"],"permissions":["core:default"]}}
+{"main-capability":{"identifier":"main-capability","description":"Capability for the WEAVE desktop shell","local":true,"windows":["main"],"permissions":["core:default","dialog:default"]}}
