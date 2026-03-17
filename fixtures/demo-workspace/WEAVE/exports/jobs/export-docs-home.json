@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "object_type": "export",
+  "id": "export-docs-home",
+  "kind": "docs",
+  "source_object_id": "page-home",
+  "title": "Studio Home collaborative draft",
+  "status": "ready",
+  "destination_hint": "docs://studio-home",
+  "last_run_at": "2026-03-16T09:40:00Z"
+}
+

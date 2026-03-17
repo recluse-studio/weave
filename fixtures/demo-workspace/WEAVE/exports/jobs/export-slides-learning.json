@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "object_type": "export",
+  "id": "export-slides-learning",
+  "kind": "slides",
+  "source_object_id": "course-launch",
+  "title": "Launch Week lesson deck",
+  "status": "ready",
+  "destination_hint": "slides://launch-week-deck",
+  "last_run_at": "2026-03-15T17:15:00Z"
+}
+

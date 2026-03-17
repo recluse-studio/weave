@@ -9,8 +9,9 @@ use gws_adapter::preview_workspace_actions;
 use serde::de::DeserializeOwned;
 use ui_contracts::{
     AgentRecord, AutomationRecipe, CommunityRecord, CourseRecord, DashboardSnapshot,
-    DirectoryEntity, FeedPost, LibraryItem, PageDraft, PageMeta, PageRecord, PageRevision,
-    SyncHealth, ThemeDefinition, WorkspaceSettings, WorkspaceSnapshot, WorkspaceSummary,
+    DirectoryEntity, ExportRecord, FeedPost, LibraryItem, LiveSessionRecord, NotificationRecord,
+    PageDraft, PageMeta, PageRecord, PageRevision, SyncHealth, ThemeDefinition, WorkspaceSettings,
+    WorkspaceSnapshot, WorkspaceSummary,
 };
 use walkdir::WalkDir;
 
@@ -42,6 +43,9 @@ impl WorkspaceRepository {
         let courses = self.load_courses()?;
         let feed = self.load_feed()?;
         let agents = self.load_agents()?;
+        let live_sessions = self.load_live_sessions()?;
+        let exports = self.load_exports()?;
+        let notifications = self.load_notifications()?;
         let automations = self.load_automations()?;
         let sync_health = SyncHealth {
             workspace_root: self.root.display().to_string(),
@@ -65,6 +69,9 @@ impl WorkspaceRepository {
             courses,
             feed,
             agents,
+            live_sessions,
+            exports,
+            notifications,
             automations,
             google_previews: Vec::new(),
             sync_health,
@@ -122,6 +129,9 @@ impl WorkspaceRepository {
                 .cloned()
                 .collect(),
             agents: snapshot.agents.clone(),
+            live_sessions: snapshot.live_sessions.clone(),
+            exports: snapshot.exports.clone(),
+            notifications: snapshot.notifications.clone(),
             automations: snapshot.automations.clone(),
             google_previews: snapshot.google_previews.clone(),
             sync_health: snapshot.sync_health,
@@ -248,6 +258,24 @@ impl WorkspaceRepository {
         Ok(agents)
     }
 
+    fn load_live_sessions(&self) -> Result<Vec<LiveSessionRecord>> {
+        let mut sessions = self.read_json_dir::<LiveSessionRecord>("courses/live-sessions")?;
+        sessions.sort_by(|left, right| left.starts_at.cmp(&right.starts_at));
+        Ok(sessions)
+    }
+
+    fn load_exports(&self) -> Result<Vec<ExportRecord>> {
+        let mut exports = self.read_json_dir::<ExportRecord>("exports/jobs")?;
+        exports.sort_by(|left, right| right.last_run_at.cmp(&left.last_run_at));
+        Ok(exports)
+    }
+
+    fn load_notifications(&self) -> Result<Vec<NotificationRecord>> {
+        let mut notifications = self.read_json_dir::<NotificationRecord>("notifications/items")?;
+        notifications.sort_by(|left, right| right.created_at.cmp(&left.created_at));
+        Ok(notifications)
+    }
+
     fn read_json<T>(&self, relative_path: &str) -> Result<T>
     where
         T: DeserializeOwned,
@@ -313,6 +341,9 @@ mod tests {
         assert!(snapshot.feed.len() >= 3);
         assert!(snapshot.pages.iter().any(|page| !page.drafts.is_empty()));
         assert!(!snapshot.agents.is_empty());
+        assert!(!snapshot.live_sessions.is_empty());
+        assert!(!snapshot.exports.is_empty());
+        assert!(!snapshot.notifications.is_empty());
         assert!(!snapshot.google_previews.is_empty());
         assert!(
             snapshot

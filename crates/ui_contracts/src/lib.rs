@@ -189,6 +189,46 @@ pub struct AgentRecord {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct LiveSessionRecord {
+    pub schema_version: u16,
+    pub object_type: String,
+    pub id: String,
+    pub title: String,
+    pub course_id: String,
+    pub community_id: String,
+    pub starts_at: Timestamp,
+    pub duration_minutes: u32,
+    pub meet_enabled: bool,
+    pub calendar_id: String,
+    pub status: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct ExportRecord {
+    pub schema_version: u16,
+    pub object_type: String,
+    pub id: String,
+    pub kind: String,
+    pub source_object_id: String,
+    pub title: String,
+    pub status: String,
+    pub destination_hint: String,
+    pub last_run_at: Timestamp,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct NotificationRecord {
+    pub schema_version: u16,
+    pub object_type: String,
+    pub id: String,
+    pub channel: String,
+    pub title: String,
+    pub body: String,
+    pub created_at: Timestamp,
+    pub state: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct AutomationStep {
     #[serde(rename = "type")]
     pub step_type: String,
@@ -275,6 +315,9 @@ pub struct WorkspaceSnapshot {
     pub courses: Vec<CourseRecord>,
     pub feed: Vec<FeedPost>,
     pub agents: Vec<AgentRecord>,
+    pub live_sessions: Vec<LiveSessionRecord>,
+    pub exports: Vec<ExportRecord>,
+    pub notifications: Vec<NotificationRecord>,
     pub automations: Vec<AutomationRecipe>,
     pub google_previews: Vec<GoogleActionPreview>,
     pub sync_health: SyncHealth,
@@ -300,6 +343,9 @@ pub struct DashboardSnapshot {
     pub featured_videos: Vec<LibraryItem>,
     pub featured_courses: Vec<CourseRecord>,
     pub agents: Vec<AgentRecord>,
+    pub live_sessions: Vec<LiveSessionRecord>,
+    pub exports: Vec<ExportRecord>,
+    pub notifications: Vec<NotificationRecord>,
     pub automations: Vec<AutomationRecipe>,
     pub google_previews: Vec<GoogleActionPreview>,
     pub sync_health: SyncHealth,

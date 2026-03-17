@@ -52,6 +52,9 @@ pub fn app(repository: WorkspaceRepository) -> Router {
         .route("/api/libraries/{kind}", get(library_index))
         .route("/api/courses", get(courses))
         .route("/api/agents", get(agent_index))
+        .route("/api/live-sessions", get(live_session_index))
+        .route("/api/exports", get(export_index))
+        .route("/api/notifications", get(notification_index))
         .route("/api/search", get(search))
         .route("/api/automations", get(automation_index))
         .route(
@@ -144,6 +147,18 @@ async fn courses(State(state): State<AppState>) -> ApiResult<impl IntoResponse> 
 
 async fn agent_index(State(state): State<AppState>) -> ApiResult<impl IntoResponse> {
     Ok(Json(state.repository.load_snapshot()?.agents))
+}
+
+async fn live_session_index(State(state): State<AppState>) -> ApiResult<impl IntoResponse> {
+    Ok(Json(state.repository.load_snapshot()?.live_sessions))
+}
+
+async fn export_index(State(state): State<AppState>) -> ApiResult<impl IntoResponse> {
+    Ok(Json(state.repository.load_snapshot()?.exports))
+}
+
+async fn notification_index(State(state): State<AppState>) -> ApiResult<impl IntoResponse> {
+    Ok(Json(state.repository.load_snapshot()?.notifications))
 }
 
 #[derive(Debug, Deserialize)]

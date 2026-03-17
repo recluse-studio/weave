@@ -9,9 +9,12 @@
     Course,
     DashboardSnapshot,
     DirectoryEntity,
+    ExportRecord,
     FeedPost,
     GoogleActionPreview,
     LibraryItem,
+    LiveSessionRecord,
+    NotificationRecord,
     PageMeta,
     PageRecord,
     RecipePreview,
@@ -29,6 +32,9 @@
   let automations: AutomationRecipe[] = []
   let agents: AgentRecord[] = []
   let googlePreviews: GoogleActionPreview[] = []
+  let liveSessions: LiveSessionRecord[] = []
+  let exports: ExportRecord[] = []
+  let notifications: NotificationRecord[] = []
   let automationPreview: RecipePreview | null = null
   let selectedPageId = ''
   let selectedPage: PageRecord | null = null
@@ -157,6 +163,9 @@
       automations = automationResponse
       agents = dashboardResponse.agents
       googlePreviews = dashboardResponse.google_previews
+      liveSessions = dashboardResponse.live_sessions
+      exports = dashboardResponse.exports
+      notifications = dashboardResponse.notifications
 
       if (pages[0]) {
         await loadPage(selectedPageId || pages[0].id)
@@ -575,6 +584,60 @@
               <span>{preview.surface}</span>
               <p>{preview.summary}</p>
               <code>{preview.command_preview}</code>
+            </li>
+          {/each}
+        </ul>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Live Learning</p>
+            <h3>Calendar-backed sessions</h3>
+          </div>
+        </div>
+        <ul class="stack compact-stack">
+          {#each liveSessions as session}
+            <li class="mini-card">
+              <strong>{session.title}</strong>
+              <span>{formatDate(session.starts_at)} · {session.duration_minutes} min</span>
+              <p>{session.meet_enabled ? 'Meet enabled' : 'Calendar only'} · {session.status}</p>
+            </li>
+          {/each}
+        </ul>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Exports</p>
+            <h3>Docs, Sheets, and Slides satellites</h3>
+          </div>
+        </div>
+        <ul class="stack compact-stack">
+          {#each exports as exportRecord}
+            <li class="mini-card">
+              <strong>{exportRecord.title}</strong>
+              <span>{exportRecord.kind} · {exportRecord.status}</span>
+              <p>{exportRecord.destination_hint}</p>
+            </li>
+          {/each}
+        </ul>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Notifications</p>
+            <h3>Cross-surface queue state</h3>
+          </div>
+        </div>
+        <ul class="stack compact-stack">
+          {#each notifications as notification}
+            <li class="mini-card">
+              <strong>{notification.title}</strong>
+              <span>{notification.channel} · {notification.state}</span>
+              <p>{notification.body}</p>
             </li>
           {/each}
         </ul>

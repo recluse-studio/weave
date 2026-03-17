@@ -119,6 +119,37 @@ export type AgentRecord = {
   posting_rules: string[]
 }
 
+export type LiveSessionRecord = {
+  id: string
+  title: string
+  course_id: string
+  community_id: string
+  starts_at: string
+  duration_minutes: number
+  meet_enabled: boolean
+  calendar_id: string
+  status: string
+}
+
+export type ExportRecord = {
+  id: string
+  kind: string
+  source_object_id: string
+  title: string
+  status: string
+  destination_hint: string
+  last_run_at: string
+}
+
+export type NotificationRecord = {
+  id: string
+  channel: string
+  title: string
+  body: string
+  created_at: string
+  state: string
+}
+
 export type RecipePreview = {
   id: string
   name: string
@@ -165,6 +196,9 @@ export type DashboardSnapshot = {
   featured_videos: LibraryItem[]
   featured_courses: Course[]
   agents: AgentRecord[]
+  live_sessions: LiveSessionRecord[]
+  exports: ExportRecord[]
+  notifications: NotificationRecord[]
   automations: AutomationRecipe[]
   google_previews: GoogleActionPreview[]
   sync_health: SyncHealth

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "object_type": "export",
+  "id": "export-sheets-directory",
+  "kind": "sheets",
+  "source_object_id": "directories-employees",
+  "title": "Employee directory bulk-edit sheet",
+  "status": "staged",
+  "destination_hint": "sheets://employee-directory",
+  "last_run_at": "2026-03-16T08:25:00Z"
+}
+

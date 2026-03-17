@@ -24,6 +24,9 @@ describe('format helpers', () => {
       featured_videos: [],
       featured_courses: [],
       agents: [],
+      live_sessions: [],
+      exports: [],
+      notifications: [],
       automations: [],
       google_previews: [],
       sync_health: {

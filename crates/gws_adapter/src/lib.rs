@@ -120,6 +120,42 @@ pub fn preview_workspace_actions(snapshot: &WorkspaceSnapshot) -> Vec<GoogleActi
         });
     }
 
+    for export in snapshot.exports.iter().take(2) {
+        let (surface, command_preview, scopes) = match export.kind.as_str() {
+            "sheets" => (
+                "sheets",
+                "gws sheets spreadsheets create --dry-run".to_string(),
+                vec!["spreadsheets".to_string(), "drive.file".to_string()],
+            ),
+            "slides" => (
+                "slides",
+                "gws slides presentations create --dry-run".to_string(),
+                vec!["presentations".to_string(), "drive.file".to_string()],
+            ),
+            _ => (
+                "docs",
+                "gws docs documents create --dry-run".to_string(),
+                vec![
+                    "docs.documents.create".to_string(),
+                    "drive.file".to_string(),
+                ],
+            ),
+        };
+
+        previews.push(GoogleActionPreview {
+            id: format!("export-{}", export.id),
+            title: format!("Refresh {} export '{}'", surface, export.title),
+            surface: surface.to_string(),
+            summary: format!(
+                "Preview the {} satellite refresh for canonical object {}.",
+                surface, export.source_object_id
+            ),
+            object_id: export.id.clone(),
+            command_preview,
+            required_scopes: scopes,
+        });
+    }
+
     previews
 }
 
@@ -127,9 +163,10 @@ pub fn preview_workspace_actions(snapshot: &WorkspaceSnapshot) -> Vec<GoogleActi
 mod tests {
     use super::*;
     use ui_contracts::{
-        AgentRecord, AutomationRecipe, AutomationStep, CommunityRecord, CourseRecord, FeedPost,
-        LessonRecord, LibraryItem, PageMeta, PageRecord, PageRevision, SyncHealth, ThemeDefinition,
-        WorkspaceSettings, WorkspaceSnapshot,
+        AgentRecord, AutomationRecipe, AutomationStep, CommunityRecord, CourseRecord, ExportRecord,
+        FeedPost, LessonRecord, LibraryItem, LiveSessionRecord, NotificationRecord, PageMeta,
+        PageRecord, PageRevision, SyncHealth, ThemeDefinition, WorkspaceSettings,
+        WorkspaceSnapshot,
     };
 
     #[test]
@@ -254,6 +291,40 @@ mod tests {
                 preferred_model: "interactive_model".to_string(),
                 allowed_tools: Vec::new(),
                 posting_rules: Vec::new(),
+            }],
+            live_sessions: vec![LiveSessionRecord {
+                schema_version: 1,
+                object_type: "live_session".to_string(),
+                id: "session-1".to_string(),
+                title: "Course office hour".to_string(),
+                course_id: "course-1".to_string(),
+                community_id: "home".to_string(),
+                starts_at: chrono::Utc::now(),
+                duration_minutes: 45,
+                meet_enabled: true,
+                calendar_id: "primary".to_string(),
+                status: "scheduled".to_string(),
+            }],
+            exports: vec![ExportRecord {
+                schema_version: 1,
+                object_type: "export".to_string(),
+                id: "export-1".to_string(),
+                kind: "slides".to_string(),
+                source_object_id: "course-1".to_string(),
+                title: "Course deck".to_string(),
+                status: "ready".to_string(),
+                destination_hint: "drive://deck".to_string(),
+                last_run_at: chrono::Utc::now(),
+            }],
+            notifications: vec![NotificationRecord {
+                schema_version: 1,
+                object_type: "notification".to_string(),
+                id: "notice-1".to_string(),
+                channel: "gmail".to_string(),
+                title: "Digest queued".to_string(),
+                body: "The weekly digest is ready.".to_string(),
+                created_at: chrono::Utc::now(),
+                state: "queued".to_string(),
             }],
             automations: vec![AutomationRecipe {
                 schema_version: 1,
