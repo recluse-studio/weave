@@ -348,6 +348,12 @@ mod tests {
                 last_replay: chrono::Utc::now(),
                 unresolved_conflicts: 0,
                 stale_cache_count: 0,
+                lost_and_found_items: 0,
+                workspace_audit_issue_count: 0,
+                export_queue_backlog: 0,
+                decryption_state: "not_enabled".to_string(),
+                relay_connectivity: "desktop_only".to_string(),
+                last_cache_rebuild: None,
             },
         };
 

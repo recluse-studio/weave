@@ -1,4 +1,5 @@
-support_docs/
+support_docs/*
+!support_docs/spec-prd.json
 support_scripts/
 
 .DS_Store

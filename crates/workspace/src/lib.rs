@@ -55,6 +55,12 @@ impl WorkspaceRepository {
             last_replay: Utc::now(),
             unresolved_conflicts: 0,
             stale_cache_count: 0,
+            lost_and_found_items: 0,
+            workspace_audit_issue_count: 0,
+            export_queue_backlog: 0,
+            decryption_state: "not_enabled".to_string(),
+            relay_connectivity: "desktop_only".to_string(),
+            last_cache_rebuild: None,
         };
 
         let mut snapshot = WorkspaceSnapshot {
@@ -298,7 +304,7 @@ impl WorkspaceRepository {
             return Ok(Vec::new());
         }
 
-        let records = fs::read_dir(&dir)?
+        let records = fs::read_dir(dir)?
             .filter_map(std::result::Result::ok)
             .map(|entry| entry.path())
             .filter(|path| path.extension().is_some_and(|ext| ext == "json"))

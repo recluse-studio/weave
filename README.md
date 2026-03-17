@@ -43,6 +43,7 @@ WEAVE is intended to support:
 - [weave.md](/Users/drewwiberg/Weave/weave.md): concise product brief
 - [SPEC.md](/Users/drewwiberg/Weave/SPEC.md): exhaustive build specification for an autonomous implementation agent
 - [AGENTS.md](/Users/drewwiberg/Weave/AGENTS.md): repo-specific guidance for long-running coding agents
+- [support_docs/spec-prd.json](/Users/drewwiberg/Weave/support_docs/spec-prd.json): machine-readable gated checklist of current spec coverage
 
 ## Current Status
 
@@ -50,6 +51,7 @@ The repository now includes:
 
 - a Rust workspace with file-backed feature crates
 - an Axum relay that reads canonical fixture content from a Drive-shaped workspace
+- sync audit and cache rebuild tooling for the workspace engine
 - a Svelte frontend for dashboard, search, feed, editorial publishing, directories, libraries, learning, and automation previews
 - a demo workspace fixture under `fixtures/demo-workspace/WEAVE`
 
@@ -73,4 +75,6 @@ The relay serves the local API on [http://127.0.0.1:8787](http://127.0.0.1:8787)
 - `npm run check`: run Rust and frontend typechecks
 - `npm run test`: run Rust and frontend tests
 - `npm run lint`: run formatting and lint checks where configured
+- `npm run workspace:audit`: emit a machine-readable workspace integrity report
+- `npm run workspace:rebuild`: rebuild the disposable local SQLite cache from canonical files
 - `bash scripts/ci/security-audit.sh`: run local security-oriented checks

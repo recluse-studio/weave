@@ -1,0 +1,741 @@
+{
+  "document_type": "product_requirements_document",
+  "name": "WEAVE Spec Audit And Gated Delivery Checklist",
+  "generated_at": "2026-03-16T20:45:00-05:00",
+  "source_documents": [
+    "AGENTS.md",
+    "SPEC.md",
+    "weave.md"
+  ],
+  "assessment_basis": {
+    "repo_root": "/Users/drewwiberg/Weave",
+    "worktree_clean_before_changes": true,
+    "post_slice_checks": [
+      "cargo fmt --all",
+      "cargo test --workspace --all-features",
+      "npm run lint",
+      "npm test",
+      "npm run workspace:audit",
+      "npm run workspace:rebuild"
+    ]
+  },
+  "summary": {
+    "stories_total": 18,
+    "done": 3,
+    "partial": 14,
+    "missing": 1,
+    "next_recommended_story_id": "BOOT-02"
+  },
+  "gating_rule": "Each story gate must be true before its dependent story is treated as executable.",
+  "user_stories": [
+    {
+      "id": "BOOT-01",
+      "milestone": "Bootstrap",
+      "spec_sections": ["7", "20", "39.0", "40"],
+      "title": "Run a local-first demo workspace surface",
+      "user_story": "As a new evaluator, I can start WEAVE locally and open a believable demo workspace with theme tokens and live data.",
+      "status": "done",
+      "implemented": [
+        "Axum relay server boots against the demo workspace fixture.",
+        "Svelte frontend loads dashboard, pages, feed, directories, libraries, courses, agents, exports, notifications, and previews.",
+        "Theme tokens and demo fixture content are wired into the primary surface."
+      ],
+      "missing": [
+        "Desktop packaging is still outside this story.",
+        "Workspace switching is not handled here."
+      ],
+      "evidence": [
+        "apps/relay/src/main.rs",
+        "frontend/src/App.svelte",
+        "fixtures/demo-workspace/WEAVE/workspace/settings.json",
+        "fixtures/demo-workspace/WEAVE/themes/theme.json"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "The relay can boot using the demo workspace root.",
+          "done": true
+        },
+        {
+          "description": "The frontend renders the demo workspace from live API responses.",
+          "done": true
+        },
+        {
+          "description": "The demo workspace acts as an acceptance fixture rather than dead sample data.",
+          "done": true
+        }
+      ],
+      "dependencies": [],
+      "gate": {
+        "ready_for_next_story": true,
+        "blocking_items": []
+      }
+    },
+    {
+      "id": "ENG-01",
+      "milestone": "Workspace Engine",
+      "spec_sections": ["8", "9", "11.4", "17", "18", "22"],
+      "title": "Load canonical files and support revisioned editorial writes",
+      "user_story": "As an editor, I can load canonical workspace files, save drafts, publish immutable page revisions, and append feed posts into JSONL segments.",
+      "status": "done",
+      "implemented": [
+        "Workspace repository reads pages, drafts, revisions, directories, libraries, courses, feed segments, agents, automations, exports, and notifications from canonical files.",
+        "Page publishing writes immutable revision files and updates the published pointer.",
+        "Draft saving writes user-scoped draft files.",
+        "Feed posting appends canonical JSONL events."
+      ],
+      "missing": [
+        "Canonical envelope fields are still thin relative to the full file contract.",
+        "Comments, likes, mentions, and moderation are not part of this story yet."
+      ],
+      "evidence": [
+        "crates/workspace/src/lib.rs",
+        "crates/pages/src/lib.rs",
+        "crates/feed/src/lib.rs",
+        "fixtures/demo-workspace/WEAVE/pages",
+        "fixtures/demo-workspace/WEAVE/feed/segments/2026/03/16/feed-0001.jsonl"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Canonical page records are read from ordinary files inside the workspace root.",
+          "done": true
+        },
+        {
+          "description": "Draft and publish flows write canonical files rather than local-only state.",
+          "done": true
+        },
+        {
+          "description": "High-churn social activity uses append-only JSONL segments.",
+          "done": true
+        }
+      ],
+      "dependencies": ["BOOT-01"],
+      "gate": {
+        "ready_for_next_story": true,
+        "blocking_items": []
+      }
+    },
+    {
+      "id": "ENG-02",
+      "milestone": "Workspace Engine",
+      "spec_sections": ["8.2", "11", "11.5", "33", "34.1"],
+      "title": "Audit canonical state and rebuild disposable local cache",
+      "user_story": "As an operator, I can audit workspace integrity, see sync health, and rebuild a disposable local cache outside the canonical Drive workspace.",
+      "status": "done",
+      "implemented": [
+        "Workspace audit now checks required paths, missing references, orphaned drafts, conflict copies, and Lost and Found items.",
+        "Sync health now surfaces stale cache families, audit issue counts, Lost and Found counts, export backlog, decryption state, relay state, and last cache rebuild time.",
+        "Cache rebuild now writes a disposable SQLite cache outside the canonical workspace root.",
+        "Operator CLI entrypoints and scripts now expose audit and rebuild output.",
+        "The frontend now exposes workspace-engine health, audit summaries, and cache rebuild actions."
+      ],
+      "missing": [
+        "Drive change-log replay and live watchers are still future work.",
+        "Conflict merge flows and repair UI remain to be built."
+      ],
+      "evidence": [
+        "crates/drive_sync/src/lib.rs",
+        "crates/api/src/lib.rs",
+        "apps/relay/src/bin/workspace_admin.rs",
+        "scripts/dev/audit-workspace.sh",
+        "scripts/dev/rebuild.sh",
+        "frontend/src/App.svelte"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "A machine-readable audit report can be produced from the workspace root.",
+          "done": true
+        },
+        {
+          "description": "A rebuildable cache is written outside the canonical workspace tree.",
+          "done": true
+        },
+        {
+          "description": "Sync health is visible through API and UI rather than implied.",
+          "done": true
+        }
+      ],
+      "dependencies": ["ENG-01"],
+      "gate": {
+        "ready_for_next_story": true,
+        "blocking_items": []
+      }
+    },
+    {
+      "id": "BOOT-02",
+      "milestone": "Bootstrap",
+      "spec_sections": ["7.1", "7.3", "13", "39.0", "41.1", "41.2", "41.3", "41.4", "41.5", "41.6"],
+      "title": "Ship a thin desktop shell and operator setup flow",
+      "user_story": "As a new user, I can open the desktop shell, select a workspace root, verify `gws`, configure Gemini, and begin from a supported local setup flow.",
+      "status": "partial",
+      "implemented": [
+        "Bootstrap diagnostics now surface `gws` presence, Gemini env readiness, the active workspace root, and the demo root.",
+        "Doctor and local dev scripts exist."
+      ],
+      "missing": [
+        "Tauri 2 desktop shell implementation.",
+        "Drive root picker and persistent root switching flow.",
+        "`gws` auth wizard and version pin UX.",
+        "Gemini setup flow beyond environment inspection."
+      ],
+      "evidence": [
+        "frontend/src/App.svelte",
+        "crates/api/src/lib.rs",
+        "scripts/dev/doctor.sh",
+        "apps/desktop/README.md"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "The product ships a runnable Tauri desktop shell.",
+          "done": false
+        },
+        {
+          "description": "Users can choose and persist a Drive-backed workspace root.",
+          "done": false
+        },
+        {
+          "description": "Bootstrap UX verifies `gws` and Gemini setup in-product.",
+          "done": false
+        }
+      ],
+      "dependencies": ["BOOT-01", "ENG-02"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "Implement the thin Tauri shell.",
+          "Add persistent workspace root selection.",
+          "Add bootstrap flows for `gws` auth and Gemini configuration."
+        ]
+      }
+    },
+    {
+      "id": "PAGES-01",
+      "milestone": "Pages And Navigation",
+      "spec_sections": ["18", "19"],
+      "title": "Deliver the structured page and guide system",
+      "user_story": "As an editor, I can compose rich structured pages, templates, and guides with reusable block behavior rather than a thin heading-plus-callout editor.",
+      "status": "partial",
+      "implemented": [
+        "Page records are block-based JSON documents.",
+        "The current editor can write a basic heading block and callout block."
+      ],
+      "missing": [
+        "Renderer and editor support for the required core block catalog.",
+        "Guide trees and persistent guide outline behavior.",
+        "Template library and clone-to-template flow.",
+        "Google-native blocks and export-specific block behavior.",
+        "Revision comparison, translation, archive, and Doc import reconciliation."
+      ],
+      "evidence": [
+        "crates/pages/src/lib.rs",
+        "crates/ui_contracts/src/lib.rs",
+        "frontend/src/App.svelte"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Required core blocks are implemented with renderer and editor behavior.",
+          "done": false
+        },
+        {
+          "description": "Guides are first-class page trees with persistent outline behavior.",
+          "done": false
+        },
+        {
+          "description": "Templates cover the required editorial starting points.",
+          "done": false
+        }
+      ],
+      "dependencies": ["BOOT-02"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "Desktop/bootstrap story remains incomplete.",
+          "The block system is still a narrow subset of the spec."
+        ]
+      }
+    },
+    {
+      "id": "HOME-01",
+      "milestone": "Pages And Navigation",
+      "spec_sections": ["20", "40"],
+      "title": "Build the full home and navigation experience",
+      "user_story": "As a member, I can open a complete home surface with the required modules and strong navigation primitives.",
+      "status": "partial",
+      "implemented": [
+        "The dashboard includes feed, search, directories, libraries, learning, agents, notifications, exports, and previews."
+      ],
+      "missing": [
+        "Trending hashtags, quick links, birthdays, anniversaries, upcoming events, recently visited, best bets, breadcrumbs, mega menu, community switcher, right-rail related content, and Google affordances."
+      ],
+      "evidence": [
+        "frontend/src/App.svelte",
+        "fixtures/demo-workspace/WEAVE/pages/page-home"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Home includes the required editorial and social modules.",
+          "done": false
+        },
+        {
+          "description": "Navigation includes mega menu, breadcrumbs, community switching, and content outliner behavior.",
+          "done": false
+        }
+      ],
+      "dependencies": ["PAGES-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "Structured navigation components remain unbuilt."
+        ]
+      }
+    },
+    {
+      "id": "LIB-01",
+      "milestone": "Libraries",
+      "spec_sections": ["21.1", "40"],
+      "title": "Ship full document, video, and image libraries",
+      "user_story": "As a knowledge manager, I can browse rich Drive-backed libraries with views, metadata, previews, and import-export tooling.",
+      "status": "partial",
+      "implemented": [
+        "Document and video library metadata load from canonical files.",
+        "Library items can appear in UI cards and search results."
+      ],
+      "missing": [
+        "Image library support.",
+        "Saved views, sort, filter, grouping, thumbnails, batch import, sheet workflows, and linked Google file indexing."
+      ],
+      "evidence": [
+        "crates/libraries/src/lib.rs",
+        "fixtures/demo-workspace/WEAVE/libraries"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Documents, videos, and images all have first-class library support.",
+          "done": false
+        },
+        {
+          "description": "Views, filters, previews, and import-export flows are available.",
+          "done": false
+        }
+      ],
+      "dependencies": ["HOME-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "Images and operational library tooling are still absent."
+        ]
+      }
+    },
+    {
+      "id": "DIR-01",
+      "milestone": "Directories And Profiles",
+      "spec_sections": ["21.2", "21.3", "21.4", "40"],
+      "title": "Deliver rich directories, profiles, and connector ingestion",
+      "user_story": "As an operator, I can manage employees, projects, and imported records through rich directory and profile surfaces.",
+      "status": "partial",
+      "implemented": [
+        "Employee and project records load from canonical files and render in the UI.",
+        "Directory records can be searched."
+      ],
+      "missing": [
+        "Companies, contacts, opportunities, and course directories.",
+        "Saved views, map mode, hover cards, custom fields, relationship editing, profile hydration, and connector ingestion."
+      ],
+      "evidence": [
+        "crates/profiles/src/lib.rs",
+        "fixtures/demo-workspace/WEAVE/directories"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "The required directory families exist with rich browse modes.",
+          "done": false
+        },
+        {
+          "description": "Profiles can hydrate from Google sources and extend locally.",
+          "done": false
+        },
+        {
+          "description": "Optional connectors normalize imported records into canonical structures.",
+          "done": false
+        }
+      ],
+      "dependencies": ["LIB-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "Directory scope is still limited to employees and projects."
+        ]
+      }
+    },
+    {
+      "id": "FEED-01",
+      "milestone": "Feed And Notifications",
+      "spec_sections": ["22", "40", "41.12", "41.13", "41.14"],
+      "title": "Complete the social feed, notifications, and digest system",
+      "user_story": "As a member, I can post, discuss, react, follow hashtags, and receive notifications and digests across the supported channels.",
+      "status": "partial",
+      "implemented": [
+        "Feed posts can be created and promoted.",
+        "Notifications have canonical fixture records.",
+        "Automation recipes and Google previews hint at digest and chat mirror flows."
+      ],
+      "missing": [
+        "Comments, likes, mentions, hashtag pages, moderation, scheduling, per-user preferences, digest generation rules, Gmail delivery, and Chat mirror execution."
+      ],
+      "evidence": [
+        "crates/feed/src/lib.rs",
+        "fixtures/demo-workspace/WEAVE/feed/segments/2026/03/16/feed-0001.jsonl",
+        "fixtures/demo-workspace/WEAVE/notifications/items",
+        "fixtures/demo-workspace/WEAVE/automations/recipes"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Discussion, reaction, and hashtag flows are fully canonical and visible.",
+          "done": false
+        },
+        {
+          "description": "Digest logic is reproducible and auditable.",
+          "done": false
+        },
+        {
+          "description": "Gmail and Chat delivery paths are available when enabled.",
+          "done": false
+        }
+      ],
+      "dependencies": ["DIR-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "The feed model only covers post creation today."
+        ]
+      }
+    },
+    {
+      "id": "SEARCH-01",
+      "milestone": "Search And AI",
+      "spec_sections": ["23", "41.16", "41.20"],
+      "title": "Ship full local-first retrieval and answer UX",
+      "user_story": "As a member, I can search everything locally and get fast cited answers with tabs, filters, and exhaustive mode.",
+      "status": "partial",
+      "implemented": [
+        "Local search spans pages, posts, library items, directory entities, and courses.",
+        "The answer pane returns visible citations.",
+        "The UI already exposes a grounded answer panel."
+      ],
+      "missing": [
+        "BM25, vectors, facet tabs, exhaustive mode, permission-aware filtering, richer citations, linked Google file indexing, and result quality blending."
+      ],
+      "evidence": [
+        "crates/search/src/lib.rs",
+        "crates/gemini_broker/src/lib.rs",
+        "frontend/src/App.svelte"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Retrieval blends lexical and semantic ranking with permissions and freshness.",
+          "done": false
+        },
+        {
+          "description": "The UI exposes result tabs, filters, and exhaustive mode.",
+          "done": false
+        },
+        {
+          "description": "Citations deep-link to anchored source locations.",
+          "done": false
+        }
+      ],
+      "dependencies": ["FEED-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "Search is still a grounded but lightweight substring implementation."
+        ]
+      }
+    },
+    {
+      "id": "GEM-01",
+      "milestone": "Gemini Runtime",
+      "spec_sections": ["24"],
+      "title": "Build the real Gemini broker",
+      "user_story": "As an operator, I can route reasoning through a centralized Gemini broker with aliases, tools, history, and grounded answer synthesis.",
+      "status": "partial",
+      "implemented": [
+        "A small broker crate exists and centralizes current answer synthesis."
+      ],
+      "missing": [
+        "Model aliases, tool declarations, history, caching, usage accounting, streaming, retries, and thought-signature preservation."
+      ],
+      "evidence": [
+        "crates/gemini_broker/src/lib.rs",
+        "crates/gemini_broker/AGENTS.md"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Gemini model aliasing is centralized and used across the repo.",
+          "done": false
+        },
+        {
+          "description": "Tool orchestration, caching, and grounded synthesis are first-class runtime features.",
+          "done": false
+        }
+      ],
+      "dependencies": ["SEARCH-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "The broker is still a placeholder rather than the full runtime."
+        ]
+      }
+    },
+    {
+      "id": "AGENTS-01",
+      "milestone": "Agent System",
+      "spec_sections": ["25", "40", "41.17"],
+      "title": "Make agents active first-class workspace members",
+      "user_story": "As a member, I can see useful agent activity with visible traces, scoped tools, and canonical outputs.",
+      "status": "partial",
+      "implemented": [
+        "Agent definitions and prompts are canonical files.",
+        "Agent cards render in the UI."
+      ],
+      "missing": [
+        "Agent runtime, thread state, memory policy, visible action traces, tool enforcement, and canonical agent output flows."
+      ],
+      "evidence": [
+        "fixtures/demo-workspace/WEAVE/agents",
+        "frontend/src/App.svelte"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Agents can execute the required actions with visible traces.",
+          "done": false
+        },
+        {
+          "description": "Permission scope is enforced at tool boundaries.",
+          "done": false
+        }
+      ],
+      "dependencies": ["GEM-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "Agents exist as records, not as a live system."
+        ]
+      }
+    },
+    {
+      "id": "LMS-01",
+      "milestone": "Learning And Video",
+      "spec_sections": ["26", "40", "41.15"],
+      "title": "Ship the learning, video, and live-learning stack",
+      "user_story": "As a learner, I can browse courses and videos, see assignments, search transcripts, and join live sessions tied to Calendar and Meet.",
+      "status": "partial",
+      "implemented": [
+        "Course records and live session records load from canonical files.",
+        "The UI exposes courses and live learning cards."
+      ],
+      "missing": [
+        "Video player, captions, transcripts, chapters, analytics, assignments, learning paths, transcript entries, and deeper Calendar and Meet flows."
+      ],
+      "evidence": [
+        "crates/lms/src/lib.rs",
+        "fixtures/demo-workspace/WEAVE/courses",
+        "fixtures/demo-workspace/WEAVE/libraries/videos/items"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Required learning objects and video features are available in-product.",
+          "done": false
+        },
+        {
+          "description": "Learning reminders, rosters, and profile summaries are integrated.",
+          "done": false
+        }
+      ],
+      "dependencies": ["AGENTS-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "Learning data exists, but the actual learning experience is still thin."
+        ]
+      }
+    },
+    {
+      "id": "GSUITE-01",
+      "milestone": "Google Suite Coordination",
+      "spec_sections": ["14", "15", "16", "27"],
+      "title": "Complete Docs, Sheets, Slides, Gmail, Calendar, and Chat coordination",
+      "user_story": "As an operator, I can export, import, deliver, mirror, and schedule Google-side work with visible command shadows and canonical backlinks.",
+      "status": "partial",
+      "implemented": [
+        "Recipe previews and Google action previews exist for Docs, Gmail, Calendar, Chat, Sheets, and Slides shadows.",
+        "Export records are canonical fixture data."
+      ],
+      "missing": [
+        "Real Docs export/import flows, Sheets bulk-edit workflows, Slides generation, Gmail send/draft execution, Calendar writes, Chat mirroring, and Groups/Admin sync."
+      ],
+      "evidence": [
+        "crates/gws_adapter/src/lib.rs",
+        "crates/automations/src/lib.rs",
+        "fixtures/demo-workspace/WEAVE/exports/jobs"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Google-side workflows execute with canonical linkage and dry-run shadows.",
+          "done": false
+        },
+        {
+          "description": "Docs, Sheets, and Slides import-export flows are live rather than preview-only.",
+          "done": false
+        }
+      ],
+      "dependencies": ["LMS-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "The repo stops at dry-run previews today."
+        ]
+      }
+    },
+    {
+      "id": "BRAND-01",
+      "milestone": "Branding And Accessibility",
+      "spec_sections": ["28"],
+      "title": "Deliver full branding controls and accessibility support",
+      "user_story": "As a workspace admin, I can tune brand feel while keeping the product accessible across light, dark, motion, and keyboard usage.",
+      "status": "partial",
+      "implemented": [
+        "The current frontend has a custom visual language, theme tokens, and mobile-aware layout behavior."
+      ],
+      "missing": [
+        "Dark mode, reduced motion, explicit branding controls, contrast automation, extension surfaces, and theme export consistency."
+      ],
+      "evidence": [
+        "frontend/src/app.css",
+        "fixtures/demo-workspace/WEAVE/themes/theme.json"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Brand controls cover the required theme and navigation settings.",
+          "done": false
+        },
+        {
+          "description": "Accessibility requirements are implemented and tested.",
+          "done": false
+        }
+      ],
+      "dependencies": ["GSUITE-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "Branding and accessibility are still mostly static styling."
+        ]
+      }
+    },
+    {
+      "id": "GOV-01",
+      "milestone": "Governance And Privacy",
+      "spec_sections": ["12", "29", "36", "41.18"],
+      "title": "Implement privacy, encryption, analytics, and governance surfaces",
+      "user_story": "As an admin, I can keep private scopes private, inspect analytics and audit trails, and export governance-friendly data.",
+      "status": "missing",
+      "implemented": [],
+      "missing": [
+        "Encryption model, key wrapping, key rotation, permission-aware indexing, analytics API, JSON/tabular exports, Drive label mirroring, and governance surfaces."
+      ],
+      "evidence": [
+        "SPEC.md"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Private scopes are encrypted and excluded from unauthorized indexing.",
+          "done": false
+        },
+        {
+          "description": "Analytics, audit, and governance APIs exist with local-first posture.",
+          "done": false
+        }
+      ],
+      "dependencies": ["BRAND-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "This area is still absent from the implementation."
+        ]
+      }
+    },
+    {
+      "id": "RELAY-01",
+      "milestone": "Relay",
+      "spec_sections": ["30"],
+      "title": "Evolve the relay from local API to optional background runtime",
+      "user_story": "As an operator, I can run the optional relay for browser mode, webhooks, schedules, background jobs, and operations visibility without making it the source of truth.",
+      "status": "partial",
+      "implemented": [
+        "A local relay binary exists as the API surface."
+      ],
+      "missing": [
+        "Browser UI, webhook receiver, scheduled recipe execution, background delivery jobs, background transcription, and operations dashboard."
+      ],
+      "evidence": [
+        "apps/relay/src/main.rs"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Relay responsibilities beyond the local API are implemented and optional.",
+          "done": false
+        }
+      ],
+      "dependencies": ["GOV-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "The relay is still a local API service rather than the optional extended runtime."
+        ]
+      }
+    },
+    {
+      "id": "REPO-01",
+      "milestone": "Repository Quality",
+      "spec_sections": ["32", "33", "34", "35", "36", "37"],
+      "title": "Finish repository scaffolding, CI, release, and visual quality gates",
+      "user_story": "As a maintainer, I can rely on complete repo scaffolding, repeatable checks, screenshots, CI, and release packaging.",
+      "status": "partial",
+      "implemented": [
+        "Root and nested AGENTS files exist in the required critical subtrees.",
+        "Doctor, dev, lint, test, security, audit, and rebuild scripts exist.",
+        "Rust and frontend wrapper commands are runnable."
+      ],
+      "missing": [
+        "CI configuration, screenshot fixtures, e2e suite, markdown/docs linting, release packaging scripts, and golden comparison workflow."
+      ],
+      "evidence": [
+        "AGENTS.md",
+        "crates/drive_sync/AGENTS.md",
+        "crates/gws_adapter/AGENTS.md",
+        "crates/gemini_broker/AGENTS.md",
+        "crates/automations/AGENTS.md",
+        "frontend/editor/AGENTS.md",
+        "fixtures/demo-workspace/AGENTS.md",
+        "scripts/dev",
+        "scripts/ci"
+      ],
+      "acceptance_criteria": [
+        {
+          "description": "Repository scaffolding fully matches the target layout and required scripts.",
+          "done": false
+        },
+        {
+          "description": "CI, visual parity, release packaging, and security automation are complete.",
+          "done": false
+        }
+      ],
+      "dependencies": ["RELAY-01"],
+      "gate": {
+        "ready_for_next_story": false,
+        "blocking_items": [
+          "Release and CI surfaces are not finished yet."
+        ]
+      }
+    }
+  ]
+}

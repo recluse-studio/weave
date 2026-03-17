@@ -6,6 +6,8 @@
   import type {
     AgentRecord,
     AutomationRecipe,
+    BootstrapStatus,
+    CacheRebuildReport,
     Course,
     DashboardSnapshot,
     DirectoryEntity,
@@ -19,6 +21,7 @@
     PageRecord,
     RecipePreview,
     SearchResponse,
+    WorkspaceAuditReport,
   } from './lib/types'
 
   let dashboard: DashboardSnapshot | null = null
@@ -36,10 +39,13 @@
   let exports: ExportRecord[] = []
   let notifications: NotificationRecord[] = []
   let automationPreview: RecipePreview | null = null
+  let bootstrapStatus: BootstrapStatus | null = null
+  let cacheRebuild: CacheRebuildReport | null = null
   let selectedPageId = ''
   let selectedPage: PageRecord | null = null
   let searchQuery = 'launch'
   let searchResponse: SearchResponse | null = null
+  let workspaceAudit: WorkspaceAuditReport | null = null
   let loading = true
   let working = false
   let error = ''
@@ -132,6 +138,7 @@
     try {
       const [
         dashboardResponse,
+        bootstrapResponse,
         pageResponse,
         feedResponse,
         employeeResponse,
@@ -140,8 +147,10 @@
         videoResponse,
         courseResponse,
         automationResponse,
+        auditResponse,
       ] = await Promise.all([
         fetchJson<DashboardSnapshot>('/api/dashboard'),
+        fetchJson<BootstrapStatus>('/api/bootstrap/status'),
         fetchJson<PageMeta[]>('/api/pages'),
         fetchJson<FeedPost[]>('/api/feed'),
         fetchJson<DirectoryEntity[]>('/api/directories/employees'),
@@ -150,9 +159,11 @@
         fetchJson<LibraryItem[]>('/api/libraries/videos'),
         fetchJson<Course[]>('/api/courses'),
         fetchJson<AutomationRecipe[]>('/api/automations'),
+        fetchJson<WorkspaceAuditReport>('/api/sync/audit'),
       ])
 
       dashboard = dashboardResponse
+      bootstrapStatus = bootstrapResponse
       pages = pageResponse
       feedPosts = feedResponse
       employees = employeeResponse
@@ -166,6 +177,7 @@
       liveSessions = dashboardResponse.live_sessions
       exports = dashboardResponse.exports
       notifications = dashboardResponse.notifications
+      workspaceAudit = auditResponse
 
       if (pages[0]) {
         await loadPage(selectedPageId || pages[0].id)
@@ -182,6 +194,20 @@
       error = loadError instanceof Error ? loadError.message : 'Failed to load WEAVE.'
     } finally {
       loading = false
+    }
+  }
+
+  const rebuildCache = async () => {
+    working = true
+    error = ''
+
+    try {
+      cacheRebuild = await postJson<CacheRebuildReport, Record<string, never>>('/api/sync/rebuild', {})
+      await loadWorkspace()
+    } catch (rebuildError) {
+      error = rebuildError instanceof Error ? rebuildError.message : 'Failed to rebuild cache.'
+    } finally {
+      working = false
     }
   }
 
@@ -328,6 +354,35 @@
           </ul>
         {/if}
       </article>
+
+      {#if bootstrapStatus}
+        <article class="hero-card search-card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Bootstrap</p>
+              <h3>Operator setup visibility</h3>
+            </div>
+          </div>
+
+          <ul class="stack compact-stack">
+            <li class="mini-card">
+              <strong>{bootstrapStatus.gws_installed ? 'gws found' : 'gws missing'}</strong>
+              <span>{bootstrapStatus.gws_version ?? 'Install and auth are still pending.'}</span>
+              <p>The cold-path Google control plane is checked here before export and delivery work.</p>
+            </li>
+            <li class="mini-card">
+              <strong>{bootstrapStatus.gemini_configured ? 'Gemini ready' : 'Gemini not configured'}</strong>
+              <span>{bootstrapStatus.gemini_source}</span>
+              <p>The broker can stay local-first until a secured Gemini credential is present.</p>
+            </li>
+            <li class="mini-card">
+              <strong>Workspace root</strong>
+              <span>{bootstrapStatus.workspace_root}</span>
+              <p>Demo root: {bootstrapStatus.demo_workspace_root}</p>
+            </li>
+          </ul>
+        </article>
+      {/if}
     </section>
 
     {#if error}
@@ -641,6 +696,82 @@
             </li>
           {/each}
         </ul>
+      </article>
+
+      <article class="panel automation-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Workspace Engine</p>
+            <h3>Sync health, cache rebuilds, and repair visibility</h3>
+          </div>
+          <button class="ghost" type="button" disabled={working} on:click={rebuildCache}>
+            Rebuild cache
+          </button>
+        </div>
+
+        <div class="card-grid">
+          <div class="mini-card">
+            <strong>{dashboard.sync_health.unresolved_conflicts}</strong>
+            <span>Conflict copies</span>
+            <p>Canonical files stay intact while merge work stays visible.</p>
+          </div>
+          <div class="mini-card">
+            <strong>{dashboard.sync_health.stale_cache_count}</strong>
+            <span>Stale cache families</span>
+            <p>Counts drift until the local cache is rebuilt from canonical files.</p>
+          </div>
+          <div class="mini-card">
+            <strong>{dashboard.sync_health.lost_and_found_items}</strong>
+            <span>Lost and Found items</span>
+            <p>Anything stranded outside the expected layout surfaces here.</p>
+          </div>
+          <div class="mini-card">
+            <strong>{dashboard.sync_health.workspace_audit_issue_count}</strong>
+            <span>Audit issues</span>
+            <p>Reference gaps, orphaned drafts, and missing paths are counted together.</p>
+          </div>
+        </div>
+
+        <div class="preview-box">
+          <strong>Current local state</strong>
+          <p>Workspace root: {dashboard.sync_health.workspace_root}</p>
+          <p>Decryption: {dashboard.sync_health.decryption_state}</p>
+          <p>Relay: {dashboard.sync_health.relay_connectivity}</p>
+          <p>
+            Cache rebuilt:
+            {#if dashboard.sync_health.last_cache_rebuild}
+              {formatDate(dashboard.sync_health.last_cache_rebuild)}
+            {:else}
+              Not yet
+            {/if}
+          </p>
+        </div>
+
+        {#if cacheRebuild}
+          <div class="preview-box">
+            <strong>Last rebuild</strong>
+            <p>{formatDate(cacheRebuild.rebuilt_at)} · {cacheRebuild.issue_count} audit issue(s)</p>
+            <code>{cacheRebuild.sqlite_path}</code>
+          </div>
+        {/if}
+
+        {#if workspaceAudit}
+          <ul class="stack compact-stack">
+            {#each [
+              ...workspaceAudit.invalid_paths,
+              ...workspaceAudit.missing_references,
+              ...workspaceAudit.orphaned_drafts,
+              ...workspaceAudit.conflict_copies,
+              ...workspaceAudit.lost_and_found_items,
+            ].slice(0, 6) as syncIssue}
+              <li class="mini-card">
+                <strong>{syncIssue.code}</strong>
+                <span>{syncIssue.severity}</span>
+                <p>{syncIssue.message}</p>
+              </li>
+            {/each}
+          </ul>
+        {/if}
       </article>
     </section>
   </main>

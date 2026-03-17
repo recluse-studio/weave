@@ -5,5 +5,12 @@ edition = "2024"
 
 [dependencies]
 anyhow.workspace = true
+chrono.workspace = true
+rusqlite.workspace = true
+serde_json.workspace = true
 ui_contracts = { path = "../ui_contracts" }
+walkdir.workspace = true
 workspace = { path = "../workspace" }
+
+[dev-dependencies]
+tempfile.workspace = true

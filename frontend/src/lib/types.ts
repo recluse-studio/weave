@@ -172,8 +172,65 @@ export type SyncHealth = {
   workspace_root: string
   drive_mode: string
   ownership_mode: string
+  last_local_scan: string
+  last_replay: string
   unresolved_conflicts: number
   stale_cache_count: number
+  lost_and_found_items: number
+  workspace_audit_issue_count: number
+  export_queue_backlog: number
+  decryption_state: string
+  relay_connectivity: string
+  last_cache_rebuild?: string | null
+}
+
+export type SyncIssue = {
+  code: string
+  severity: string
+  message: string
+  path: string
+  object_id?: string | null
+}
+
+export type WorkspaceAuditReport = {
+  workspace_id: string
+  workspace_root: string
+  scanned_at: string
+  summary: {
+    missing_references: number
+    orphaned_drafts: number
+    conflict_copies: number
+    lost_and_found_items: number
+    invalid_paths: number
+  }
+  missing_references: SyncIssue[]
+  orphaned_drafts: SyncIssue[]
+  conflict_copies: SyncIssue[]
+  lost_and_found_items: SyncIssue[]
+  invalid_paths: SyncIssue[]
+}
+
+export type CacheRebuildReport = {
+  workspace_id: string
+  workspace_root: string
+  cache_root: string
+  sqlite_path: string
+  rebuilt_at: string
+  object_counts: Array<{
+    kind: string
+    count: number
+  }>
+  issue_count: number
+}
+
+export type BootstrapStatus = {
+  workspace_root: string
+  demo_workspace_root: string
+  gws_installed: boolean
+  gws_version?: string | null
+  gemini_configured: boolean
+  gemini_source: string
+  desktop_shell_ready: boolean
 }
 
 export type DashboardSnapshot = {

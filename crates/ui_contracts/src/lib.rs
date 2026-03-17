@@ -249,6 +249,74 @@ pub struct SyncHealth {
     pub last_replay: Timestamp,
     pub unresolved_conflicts: usize,
     pub stale_cache_count: usize,
+    pub lost_and_found_items: usize,
+    pub workspace_audit_issue_count: usize,
+    pub export_queue_backlog: usize,
+    pub decryption_state: String,
+    pub relay_connectivity: String,
+    #[serde(default)]
+    pub last_cache_rebuild: Option<Timestamp>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct SyncIssue {
+    pub code: String,
+    pub severity: String,
+    pub message: String,
+    pub path: String,
+    #[serde(default)]
+    pub object_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct WorkspaceAuditSummary {
+    pub missing_references: usize,
+    pub orphaned_drafts: usize,
+    pub conflict_copies: usize,
+    pub lost_and_found_items: usize,
+    pub invalid_paths: usize,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct WorkspaceAuditReport {
+    pub workspace_id: String,
+    pub workspace_root: String,
+    pub scanned_at: Timestamp,
+    pub summary: WorkspaceAuditSummary,
+    pub missing_references: Vec<SyncIssue>,
+    pub orphaned_drafts: Vec<SyncIssue>,
+    pub conflict_copies: Vec<SyncIssue>,
+    pub lost_and_found_items: Vec<SyncIssue>,
+    pub invalid_paths: Vec<SyncIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct CacheObjectCount {
+    pub kind: String,
+    pub count: usize,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct CacheRebuildReport {
+    pub workspace_id: String,
+    pub workspace_root: String,
+    pub cache_root: String,
+    pub sqlite_path: String,
+    pub rebuilt_at: Timestamp,
+    pub object_counts: Vec<CacheObjectCount>,
+    pub issue_count: usize,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+pub struct BootstrapStatus {
+    pub workspace_root: String,
+    pub demo_workspace_root: String,
+    pub gws_installed: bool,
+    #[serde(default)]
+    pub gws_version: Option<String>,
+    pub gemini_configured: bool,
+    pub gemini_source: String,
+    pub desktop_shell_ready: bool,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]

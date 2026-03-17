@@ -6,6 +6,8 @@
   "scripts": {
     "setup": "npm install && npm --prefix frontend install",
     "doctor": "bash scripts/dev/doctor.sh",
+    "workspace:audit": "bash scripts/dev/audit-workspace.sh",
+    "workspace:rebuild": "bash scripts/dev/rebuild.sh",
     "dev": "concurrently -n relay,frontend -c blue,green \"npm run dev:relay\" \"npm run dev:frontend\"",
     "dev:frontend": "npm --prefix frontend run dev -- --host 0.0.0.0",
     "dev:relay": "bash scripts/dev/relay.sh",

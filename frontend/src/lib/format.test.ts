@@ -33,8 +33,16 @@ describe('format helpers', () => {
         workspace_root: '/tmp',
         drive_mode: 'mirrored',
         ownership_mode: 'my_drive',
+        last_local_scan: '2026-03-16T10:00:00Z',
+        last_replay: '2026-03-16T10:00:00Z',
         unresolved_conflicts: 0,
         stale_cache_count: 0,
+        lost_and_found_items: 0,
+        workspace_audit_issue_count: 0,
+        export_queue_backlog: 0,
+        decryption_state: 'not_enabled',
+        relay_connectivity: 'desktop_only',
+        last_cache_rebuild: null,
       },
     })
 
